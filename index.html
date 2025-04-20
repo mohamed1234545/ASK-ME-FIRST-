@@ -1,163 +1,252 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ask Me First - بوت الكمبيوتر المتكامل</title>
+  <title>Ask Me First</title>
   <style>
     body {
-      background-color: #0d0d0d;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 30px;
-      direction: rtl;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #fff;
+      transition: 0.3s;
     }
-    .container {
-      max-width: 800px;
-      margin: auto;
-    }
-    h1 {
-      text-align: center;
-      color: #00ffcc;
-      font-size: 2.5em;
-      margin-bottom: 20px;
-    }
-    input, button {
-      width: 100%;
-      padding: 12px;
-      font-size: 1em;
-      border-radius: 8px;
-      border: none;
-      margin-top: 10px;
-    }
-    button {
-      background-color: #00ffcc;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color .3s;
-    }
-    button:hover {
-      background-color: #00cc99;
-    }
-    #botResponse {
-      margin-top: 25px;
-      background: #1a1a1a;
-      border-left: 5px solid #00ffcc;
+
+    header {
+      background-color: #1f1f1f;
       padding: 20px;
-      border-radius: 12px;
-      animation: slideFade .5s ease-in-out;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
     }
-    #botResponse img {
-      width: 300px;
-      max-width: 100%;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      border: 2px solid #00ffcc;
+
+    .chatbox {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #1a1a1a;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
     }
-    @keyframes slideFade {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+
+    .input-area {
+      display: flex;
+      margin-top: 20px;
     }
-    a {
-      color: #00ffcc;
+
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px 0 0 5px;
+    }
+
+    .input-area button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #ff9800;
+      color: white;
+      font-weight: bold;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
+
+    .response {
+      margin-top: 20px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .product {
+      background-color: #252525;
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .product img {
+      width: 120px;
+      height: 120px;
+      border-radius: 5px;
+      object-fit: cover;
+    }
+
+    .product-details {
+      flex: 1;
+    }
+
+    .product-details h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .product-details p {
+      margin: 5px 0;
+    }
+
+    .product-details a {
+      color: #4caf50;
       text-decoration: none;
+      margin-right: 10px;
     }
-    a:hover {
-      text-decoration: underline;
+
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .categories button {
+      background-color: #333;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .mode-toggle {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      cursor: pointer;
+      background-color: #444;
+      padding: 5px 10px;
+      color: white;
+      border-radius: 5px;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🤖 Ask Me First</h1>
-    <input type="text" id="userQuestion" placeholder="اكتب سؤالك عن أي منتج أو تجميعة كمبيوتر هنا..." />
-    <button onclick="getAnswer()">اسأل البوت</button>
-    <div id="botResponse"></div>
+
+<div class="mode-toggle" onclick="toggleMode()">🌙</div>
+
+<header>🤖 Ask Me First - مساعدك في عالم الكمبيوتر</header>
+
+<div class="categories">
+  <button onclick="showCategory('كيبورد')">كيبوردات</button>
+  <button onclick="showCategory('ماوس')">ماوسات</button>
+  <button onclick="showCategory('شاشة')">شاشات</button>
+  <button onclick="showCategory('تجميعة')">تجميعات</button>
+</div>
+
+<div class="chatbox" id="chatbox">
+  <div class="response" id="bot">
+    🤖 أهلاً! أقدر أساعدك في إيه؟ اسألني مثلاً:  
+    <ul>
+      <li>أفضل كيبورد بـ 2000 جنيه</li>
+      <li>أفضل ماوس جيمينج</li>
+      <li>أرخص تجميعة للألعاب</li>
+    </ul>
   </div>
 
-  <script>
-    function getAnswer() {
-      const q = document.getElementById('userQuestion').value.toLowerCase();
-      const d = document.getElementById('botResponse');
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="اسأل عن أي حاجة ليها علاقة بالكمبيوتر...">
+    <button onclick="getAnswer()">إرسال</button>
+  </div>
+</div>
 
-      // تهيئة المحتوى
-      let html = '';
+<script>
+  const productsDB = {
+    'كيبورد': [
+      {
+        name: "Redragon K552 Kumara",
+        price: "1700 جنيه",
+        img: "https://m.media-amazon.com/images/I/61o0aZ-1zLL.jpg",
+        links: ["https://www.jumia.com.eg", "https://www.noon.com"]
+      },
+      {
+        name: "Redragon K617 Fizz",
+        price: "1750 جنيه",
+        img: "https://m.media-amazon.com/images/I/61+nbG7dcbL.jpg",
+        links: ["https://www.jumia.com.eg", "https://www.noon.com"]
+      }
+    ],
+    'ماوس': [
+      {
+        name: "Logitech G203",
+        price: "550 جنيه",
+        img: "https://m.media-amazon.com/images/I/61LtuGzXeaL._AC_SL1500_.jpg",
+        links: ["https://www.amazon.com", "https://www.noon.com"]
+      },
+      {
+        name: "Razer DeathAdder V2",
+        price: "1600 جنيه",
+        img: "https://m.media-amazon.com/images/I/61doeA1v4iL.jpg",
+        links: ["https://www.jumia.com.eg", "https://www.amazon.com"]
+      }
+    ],
+    'شاشة': [
+      {
+        name: "LG 24'' UltraGear",
+        price: "4200 جنيه",
+        img: "https://m.media-amazon.com/images/I/81i9A-jXGKL.jpg",
+        links: ["https://www.amazon.com", "https://www.noon.com"]
+      }
+    ],
+    'تجميعة': [
+      {
+        name: "تجميعة Ryzen 5 + GTX 1660",
+        price: "13000 جنيه",
+        img: "https://m.media-amazon.com/images/I/91A+4yaeSBL.jpg",
+        links: ["https://ahw.store/ar", "https://www.amazon.com"]
+      }
+    ]
+  };
 
-      // ماوس
-      if (q.includes('ماوس')) {
-        html = `
-          <img src="https://i.imgur.com/Z9h8bZJ.jpeg" alt="Redragon M612">
-          <h2>🖱️ Redragon M612</h2>
-          <p><strong>المميزات:</strong> 8000 DPI، 11 زر قابل للبرمجة، RGB</p>
-          <p><strong>السعر:</strong> 850 جنيه</p>
-          <p><a href="https://www.amazon.eg/dp/B09X1Y8Z1Z" target="_blank">شراء من أمازون.eg</a></p>`;
-      }
-      // كيبورد
-      else if (q.includes('كيبورد') || q.includes('لوحة مفاتيح')) {
-        html = `
-          <img src="https://i.imgur.com/rpXVpyE.jpeg" alt="Redragon K552">
-          <h2>⌨️ Redragon K552 KUMARA</h2>
-          <p><strong>المميزات:</strong> ميكانيكي، RGB، سويتش أزرق</p>
-          <p><strong>السعر:</strong> 1,690 جنيه</p>
-          <p><a href="https://www.amazon.eg/dp/B085T458RR" target="_blank">شراء من أمازون.eg</a></p>`;
-      }
-      // شاشة
-      else if (q.includes('شاشة') || q.includes('monitor')) {
-        html = `
-          <img src="https://i.imgur.com/1eOJ7fi.jpeg" alt="BenQ Monitor">
-          <h2>🖥️ BenQ 24" LED Monitor</h2>
-          <p><strong>المميزات:</strong> 1080p، 75Hz، IPS</p>
-          <p><strong>السعر:</strong> 2,200 جنيه</p>
-          <p><a href="https://www.jumia.com.eg/product/benq-24-inch-monitor" target="_blank">شراء من جوميا</a></p>`;
-      }
-      // رامات
-      else if (q.includes('رام') || q.includes('ddr')) {
-        html = `
-          <img src="https://i.imgur.com/W5ySV5g.jpeg" alt="Corsair Vengeance">
-          <h2>💾 Corsair Vengeance 8GB DDR4</h2>
-          <p><strong>المميزات:</strong> 8GB، 3200MHz</p>
-          <p><strong>السعر:</strong> 650 جنيه</p>
-          <p><a href="https://www.jumia.com.eg/corsair-vengeance-8gb-ddr4" target="_blank">شراء من جوميا</a></p>`;
-      }
-      // GPU
-      else if (q.includes('كارت شاشة') || q.includes('gpu')) {
-        html = `
-          <img src="https://i.imgur.com/2Bl2kNk.jpeg" alt="RTX 3060">
-          <h2>🎮 NVIDIA RTX 3060</h2>
-          <p><strong>المميزات:</strong> 12GB VRAM، دعم تتبع الأشعة</p>
-          <p><strong>السعر:</strong> 8,000 جنيه</p>
-          <p><a href="https://www.amazon.eg/dp/B08YNVHDGT" target="_blank">شراء من أمازون.eg</a></p>`;
-      }
-      // لوحة أم
-      else if (q.includes('لوحة أم') || q.includes('motherboard')) {
-        html = `
-          <img src="https://i.imgur.com/3y6kQJx.jpeg" alt="MSI B450">
-          <h2>🔧 MSI B450 Tomahawk</h2>
-          <p><strong>المميزات:</strong> Chipset B450، دعم Ryzen، واجهة USB 3.1</p>
-          <p><strong>السعر:</strong> 2,200 جنيه</p>
-          <p><a href="https://www.jumia.com.eg/msi-b450-tomahawk" target="_blank">شراء من جوميا</a></p>`;
-      }
-      // تجميعات
-      else if (q.includes('تجميعة') || q.includes('تجميع')) {
-        html = `
-          <img src="https://i.imgur.com/2s8NYVu.jpeg" alt="PC Build">
-          <h2>🛠️ تجميعة اقتصادية</h2>
-          <p><strong>المعالج:</strong> Core i3 12100F</p>
-          <p><strong>GPU:</strong> GTX 1650</p>
-          <p><strong>الرام:</strong> 8GB DDR4</p>
-          <p><strong>التخزين:</strong> SSD 256GB</p>
-          <p><strong>السعر:</strong> 13,800 جنيه</p>
-          <p><a href="https://tv-it.com/ar/product-categories/pc-bundles-egypt" target="_blank">رابط الشراء</a></p>`;
-      }
-      // غير موجود
-      else {
-        html = `<p>❓ لم أجد ما تطلبه. جرّب البحث بكلمات مثل: ماوس، كيبورد، شاشة، رام، GPU، لوحة أم، تجميعة.</p>`;
-      }
+  function getAnswer() {
+    const userText = document.getElementById("userInput").value.toLowerCase();
+    const container = document.getElementById("bot");
+    container.innerHTML = "";
 
-      d.innerHTML = html;
+    let found = false;
+    for (const category in productsDB) {
+      if (userText.includes(category)) {
+        found = true;
+        productsDB[category].forEach(prod => {
+          container.innerHTML += `
+            <div class="product">
+              <img src="${prod.img}" onerror="this.src='https://via.placeholder.com/120?text=No+Image'"/>
+              <div class="product-details">
+                <h3>${prod.name}</h3>
+                <p>السعر: ${prod.price}</p>
+                ${prod.links.map(link => `<a href="${link}" target="_blank">شراء</a>`).join("")}
+              </div>
+            </div>
+          `;
+        });
+      }
     }
-  </script>
+
+    if (!found) {
+      container.innerHTML = "❌ معذرة، مش لاقي نتائج للسؤال ده، جرب صيغة تانية!";
+    }
+
+    document.getElementById("userInput").value = "";
+  }
+
+  function showCategory(cat) {
+    document.getElementById("userInput").value = cat;
+    getAnswer();
+  }
+
+  function toggleMode() {
+    const body = document.body;
+    const isDark = body.style.backgroundColor === "white";
+    body.style.backgroundColor = isDark ? "#121212" : "white";
+    body.style.color = isDark ? "white" : "#121212";
+  }
+</script>
+
 </body>
 </html>
