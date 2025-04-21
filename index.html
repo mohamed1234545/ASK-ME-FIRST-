@@ -3,242 +3,348 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ask Me First</title>
+  <title>💻 مساعد الكمبيوتر الذكي</title>
   <style>
-    * { box-sizing: border-box; transition: all 0.3s ease; }
-    body {
-      margin: 0; padding: 0;
-      font-family: 'Cairo', sans-serif;
-      background: #121212; color: #fff;
+    /* متغيرات الألوان */
+    :root {
+      --bg-light: #f5f5f5;
+      --text-light: #222;
+      --card-light: #fff;
+      --bg-dark: #121212;
+      --text-dark: #eee;
+      --card-dark: #1e1e1e;
+      --primary: #3498db;
+      --primary-dark: #2980b9;
     }
-    body.light-mode {
-      background: #fff; color: #000;
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+      transition: background 0.4s, color 0.4s;
+      padding-top: 60px;
+    }
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
     }
     header {
-      display: flex; align-items: center; padding: 1rem;
-      background: #1f1f1f; position: sticky; top: 0; z-index: 1000;
+      position: fixed; top: 0; left: 0; right: 0;
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      z-index: 1000;
     }
-    .toggle-mode {
-      font-size: 1.8rem; cursor: pointer; margin-right: auto;
-      user-select: none;
+
+    /* زر الوضع */
+    #theme-toggle {
+      position: fixed; top: 15px; left: 15px;
+      background: none; border: none;
+      font-size: 24px; cursor: pointer;
+      transition: transform 0.6s;
+      z-index: 1001;
     }
-    .toggle-mode.rotate { transform: rotate(180deg); }
-    h1 { margin: 0; font-size: 1.5rem; text-align: center; flex: 1; }
-    .container {
-      max-width: 900px; margin: auto; padding: 1rem;
+    #theme-toggle.rotate {
+      transform: rotate(180deg);
     }
-    .chat-box {
-      background: #2c2c2c; border-radius: 10px; padding: 1rem;
-      margin-bottom: 1rem; min-height: 150px;
+
+    /* قسم الأسئلة */
+    .qa {
+      max-width: 500px;
+      margin: 20px auto;
+      display: flex;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--card-light);
+      transition: background 0.4s;
     }
-    .response {
-      background: #3a3a3a; padding: .8rem; border-radius: 8px;
-      line-height: 1.5; margin-top: .5rem;
+    body.dark .qa { background: var(--card-dark); }
+    .qa input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: transparent;
+      color: inherit;
     }
-    .input-group {
-      display: flex; gap: 10px;
+    .qa button {
+      padding: 0 20px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
     }
-    input[type="text"] {
-      flex: 1; padding: .6rem; border: none;
-      border-radius: 6px; outline: none; font-size: 1rem;
-      background: #1f1f1f; color: inherit;
+    .qa button:hover {
+      background: var(--primary-dark);
     }
-    .input-group button {
-      padding: .6rem 1rem; background: #00ffd9;
-      border: none; border-radius: 6px; cursor: pointer;
-      font-weight: bold;
+    #qa-answer {
+      max-width: 500px;
+      margin: 10px auto 20px;
+      padding: 15px;
+      background: var(--card-light);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      min-height: 60px;
+      transition: background 0.4s;
     }
-    .build-button {
-      display: block; margin: 1rem auto;
-      background: #ff9800; color: #fff;
-      padding: .8rem 1.2rem; border: none; border-radius: 8px;
-      font-size: 1rem; cursor: pointer;
-    }
+    body.dark #qa-answer { background: var(--card-dark); }
+
+    /* الأقسام */
     .sections {
-      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem;
+      max-width: 800px;
+      margin: 0 auto 40px;
+      padding: 0 10px;
     }
     .section {
-      flex: 1 1 30%; background: #2c2c2c; text-align: center;
-      padding: 1rem; border-radius: 10px; cursor: pointer;
-      user-select: none;
+      margin-bottom: 20px;
     }
+    .section-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.3s;
+    }
+    .section-header:hover {
+      background: var(--primary-dark);
+    }
+    .section-header::after {
+      content: '▼';
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%) rotate(0deg);
+      transition: transform 0.3s;
+    }
+    .section-header.open::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+    .content {
+      display: none;
+      margin-top: 10px;
+      animation: fadeIn 0.3s ease-out;
+    }
+    .content.visible { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px);}
+      to { opacity:1; transform: translateY(0);}
+    }
+
+    /* بطاقات المنتجات */
     .products {
-      display: none; padding: 1rem; background: #1a1a1a;
-      margin-top: .5rem; border-radius: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: 15px;
     }
-    .filters {
-      display: flex; gap: 10px; margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-    .filters button {
-      padding: .4rem .8rem; border: none; border-radius: 5px;
-      background: #444; color: #fff; cursor: pointer;
-    }
-    .filters button.active {
-      background: #00ffd9; color: #000;
-    }
-    .product-item {
-      display: flex; gap: 10px; margin-bottom: 1rem;
-      align-items: center;
-    }
-    .product-item img {
-      width: 100px; height: 100px; object-fit: cover;
+    .product {
+      background: var(--card-light);
       border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s, background 0.4s;
+      text-align: center;
     }
-    .product-details { flex: 1; }
-    @media(max-width:600px){
-      .section { flex:1 1 100%; }
-      .product-item { flex-direction: column; align-items: flex-start; }
+    body.dark .product { background: var(--card-dark); }
+    .product:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .product img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: #ddd;
+    }
+    .details {
+      padding: 10px;
+    }
+    .details h3 {
+      font-size: 1rem;
+      margin: 8px 0;
+    }
+    .details p {
+      font-size: 0.9rem;
+      margin: 6px 0;
+    }
+    .details a {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 6px 12px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+    .details a:hover {
+      background: var(--primary-dark);
+    }
+
+    /* تجاوب على الموبايل */
+    @media(max-width:600px) {
+      .products { grid-template-columns:1fr; }
+      .qa { flex-direction: column; }
+      .qa input, .qa button { width: 100%; border-radius:0; }
+      .qa button { margin-top: 5px; }
     }
   </style>
 </head>
-<body class="dark-mode">
-  <header>
-    <div id="modeIcon" class="toggle-mode" onclick="toggleMode()">🌙</div>
-    <h1>Ask Me First</h1>
-  </header>
-  <div class="container">
-    <div class="chat-box">
-      🤖 <strong>أقدر أساعدك إزاي؟</strong>
-      <div id="responseBox" class="response">
-        اسألني عن أي منتج أو تجميعة كمبيوتر...
-      </div>
-    </div>
-    <div class="input-group">
-      <input id="userInput" type="text" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key==='Enter') getResponse()">
-      <button onclick="getResponse()">إرسال</button>
-      <button class="build-button" onclick="toggleBuild()">🔧 طلب تجميعة كمبيوتر</button>
-    </div>
+<body>
 
-    <div class="sections">
-      <div class="section" onclick="toggleProducts('keyboards')">⌨️ كيبوردات</div>
-      <div class="section" onclick="toggleProducts('mice')">🖱️ ماوسات</div>
-      <div class="section" onclick="toggleProducts('screens')">🖥️ شاشات</div>
-      <div class="section" onclick="toggleProducts('cpus')">⚙️ معالجات</div>
-      <div class="section" onclick="toggleProducts('gpus')">🎮 كروت شاشة</div>
-    </div>
+  <!-- زر الوضع الليلي/نهاري -->
+  <button id="theme-toggle">
+    <span id="theme-icon">☀️</span>
+  </button>
 
-    <!-- Products Sections -->
-    <div id="keyboards" class="products">
-      <div class="filters">
-        <button onclick="applyFilter('keyboards','asc',this)">الأرخص</button>
-        <button onclick="applyFilter('keyboards','desc',this)">الأعلى سعرًا</button>
-      </div>
-      <div id="keyboards-list"></div>
+  <header>💻 مساعد الكمبيوتر الذكي</header>
+
+  <!-- قسم الأسئلة -->
+  <div class="qa">
+    <input id="qa-input" type="text" placeholder="مثال: كم سعر RTX 3060؟">
+    <button id="qa-btn">اسأل</button>
+  </div>
+  <div id="qa-answer"></div>
+
+  <!-- الأقسام -->
+  <div class="sections">
+    <div class="section" id="section-gpus">
+      <div class="section-header" data-id="gpus">🎮 كروت الشاشة</div>
+      <div class="content" id="gpus"><div class="products"></div></div>
     </div>
-    <div id="mice" class="products">
-      <div class="filters">
-        <button onclick="applyFilter('mice','asc',this)">الأرخص</button>
-        <button onclick="applyFilter('mice','desc',this)">الأعلى سعرًا</button>
-      </div>
-      <div id="mice-list"></div>
+    <div class="section" id="section-cpus">
+      <div class="section-header" data-id="cpus">🧠 المعالجات</div>
+      <div class="content" id="cpus"><div class="products"></div></div>
     </div>
-    <div id="screens" class="products">
-      <div class="filters">
-        <button onclick="applyFilter('screens','asc',this)">الأرخص</button>
-        <button onclick="applyFilter('screens','desc',this)">الأعلى سعرًا</button>
-      </div>
-      <div id="screens-list"></div>
+    <div class="section" id="section-cases">
+      <div class="section-header" data-id="cases">🖴 الكيسات</div>
+      <div class="content" id="cases"><div class="products"></div></div>
     </div>
-    <div id="cpus" class="products">
-      <div class="filters">
-        <button onclick="applyFilter('cpus','asc',this)">الأرخص</button>
-        <button onclick="applyFilter('cpus','desc',this)">الأعلى سعرًا</button>
-      </div>
-      <div id="cpus-list"></div>
-    </div>
-    <div id="gpus" class="products">
-      <div class="filters">
-        <button onclick="applyFilter('gpus','asc',this)">الأرخص</button>
-        <button onclick="applyFilter('gpus','desc',this)">الأعلى سعرًا</button>
-      </div>
-      <div id="gpus-list"></div>
+    <div class="section" id="section-builds">
+      <div class="section-header" data-id="builds">⚙️ التجميعات</div>
+      <div class="content" id="builds"><div class="products"></div></div>
     </div>
   </div>
 
   <script>
-    // Data sources simulation
-    const sources = {
-      amazon: {
-        keyboards: [
-          {name:'Redragon K552',price:1700,img:'https://m.media-amazon.com/images/I/61eVx3kMKjL.jpg',link:'https://amazon.eg'},
-          {name:'Logitech G Pro X',price:2900,img:'https://m.media-amazon.com/images/I/61L2i3Uxd0L._AC_SL1500_.jpg',link:'https://amazon.com'}
-        ],
-        mice: [
-          {name:'Logitech G203',price:900,img:'https://m.media-amazon.com/images/I/61LtuGzXeaL.jpg',link:'https://amazon.eg'},
-          {name:'Razer DeathAdder',price:1850,img:'https://m.media-amazon.com/images/I/61doeA1v4iL.jpg',link:'https://amazon.com'}
-        ]
-        // ... similarly for screens, cpus, gpus
-      },
-      jumia: {
-        keyboards: [
-          {name:'Redragon K617',price:1750,img:'https://example.com/k617.jpg',link:'https://jumia.com.eg'},
-          {name:'Aula F2066',price:1200,img:'https://example.com/aula.jpg',link:'https://jumia.com.eg'}
-        ],
-        mice: [
-          {name:'Redragon M601',price:800,img:'https://example.com/m601.jpg',link:'https://jumia.com.eg'},
-          {name:'HyperX Pulsefire',price:2000,img:'https://example.com/hyperx.jpg',link:'https://jumia.com.eg'}
-        ]
-        // ... similarly for screens, cpus, gpus
-      }
+    // بيانات المنتجات
+    const catalog = {
+      gpus: [
+        {n:'RTX 3060',p:10000,img:'https://m.media-amazon.com/images/I/81smf7kvktL._AC_SL1500_.jpg',l:'https://amazon.eg/dp/B08P2DKQ39'},
+        {n:'RTX 3090',p:25000,img:'https://m.media-amazon.com/images/I/91mltnB1C0L._AC_SL1500_.jpg',l:'https://amazon.eg/dp/B08GGTHB4N'},
+        {n:'RTX 4060',p:20000,img:'https://m.media-amazon.com/images/I/91s6S2OTgTL._AC_SL1500_.jpg',l:'https://amazon.eg/dp/B08W4D5RRZ'},
+        {n:'RTX 4090',p:35000,img:'https://m.media-amazon.com/images/I/81mBrcj02PL._AC_SL1500_.jpg',l:'https://amazon.eg/dp/B08P5HFDG3'}
+      ],
+      cpus: [
+        {n:'Intel i7-12700K',p:6000,img:'https://m.media-amazon.com/images/I/81CgbWrJ0KL._AC_SL1500_.jpg',l:'https://amazon.eg/dp/B08J6YWB46'},
+        {n:'AMD Ryzen 9 5900X',p:7000,img:'https://m.media-amazon.com/images/I/71FzltLwPML._AC_SL1500_.jpg',l:'https://amazon.eg/dp/B08R62ZWGL'}
+      ],
+      cases: [
+        {n:'NZXT H510',p:1200,img:'https://m.media-amazon.com/images/I/81tAvOhvSgL._AC_SL1500_.jpg',l:'https://amazon.eg/dp/B07JYYNRBQ'},
+        {n:'Corsair 4000D',p:1400,img:'https://m.media-amazon.com/images/I/71guFfF1DUL._AC_SL1500_.jpg',l:'https://amazon.eg/dp/B08Z3T6WYP'}
+      ],
+      builds: [
+        {n:'تجميعة اقتصادية',p:14000,img:'https://via.placeholder.com/200?text=Budget',l:'https://amazon.eg/s?k=budget+pc'},
+        {n:'تجميعة متوسطة',p:18000,img:'https://via.placeholder.com/200?text=Mid',l:'https://amazon.eg/s?k=mid+range+pc'},
+        {n:'تجميعة احترافية',p:30000,img:'https://via.placeholder.com/200?text=High+End',l:'https://amazon.eg/s?k=high+end+pc'}
+      ]
     };
 
-    function toggleMode() {
-      document.body.classList.toggle("light-mode");
-      document.getElementById("modeIcon").classList.toggle("rotate");
+    // تفعيل الثيم الليلي/النهاري مع أنيميشن
+    const themeBtn = document.getElementById('theme-toggle'),
+          themeIcon = document.getElementById('theme-icon');
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      themeIcon.classList.add('rotate');
+      setTimeout(() => themeIcon.classList.remove('rotate'), 600);
+      themeIcon.textContent = document.body.classList.contains('dark') ? '🌙' : '☀️';
+    });
+
+    // إعداد الأقسام
+    document.querySelectorAll('.section-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const id = header.dataset.id;
+        const sec = document.getElementById(id);
+        header.classList.toggle('open');
+        sec.classList.toggle('visible');
+        if (sec.classList.contains('visible')) renderProducts(id);
+      });
+    });
+
+    // عرض المنتجات في القسم
+    function renderProducts(cat) {
+      const container = document.querySelector(`#${cat} .products`);
+      container.innerHTML = '';
+      catalog[cat].forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${item.img}" alt="${item.n}" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+          <div class="details">
+            <h3>${item.n}</h3>
+            <p>السعر: ${item.p.toLocaleString()} ج.م.</p>
+            <a href="${item.l}" target="_blank">شراء الآن</a>
+          </div>`;
+        container.appendChild(div);
+      });
     }
 
-    function toggleBuild() {
-      const buildSection = document.getElementById('build-section');
-      buildSection.style.display = buildSection.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function toggleProducts(category) {
-      document.querySelectorAll('.products').forEach(section => section.style.display = 'none');
-      const section = document.getElementById(category);
-      section.style.display = section.style.display === 'block' ? 'none' : 'block';
-      loadProducts(category);
-    }
-
-    function loadProducts(category) {
-      const productList = document.getElementById(category + '-list');
-      const source = sources.amazon[category] || [];
-      productList.innerHTML = source.map(item => `
-        <div class="product-item">
-          <img src="${item.img}" alt="${item.name}">
-          <div class="product-details">
-            <strong>${item.name}</strong>
-            <p>${item.price} جنيه</p>
-            <a href="${item.link}" target="_blank">شراء</a>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function applyFilter(category, order, button) {
-      const productList = document.getElementById(category + '-list');
-      const source = sources.amazon[category] || [];
-      const sortedProducts = [...source].sort((a, b) => order === 'asc' ? a.price - b.price : b.price - a.price);
-      productList.innerHTML = sortedProducts.map(item => `
-        <div class="product-item">
-          <img src="${item.img}" alt="${item.name}">
-          <div class="product-details">
-            <strong>${item.name}</strong>
-            <p>${item.price} جنيه</p>
-            <a href="${item.link}" target="_blank">شراء</a>
-          </div>
-        </div>
-      `).join('');
-      button.classList.toggle('active');
-    }
-
-    function getResponse() {
-      const userInput = document.getElementById("userInput").value;
-      if (!userInput) return;
-      document.getElementById("responseBox").innerHTML = 'جارٍ البحث...';
-      setTimeout(() => {
-        document.getElementById("responseBox").innerHTML = 'تم العثور على النتائج!';
-      }, 2000);
+    // البحث والإجابة
+    document.getElementById('qa-btn').addEventListener('click', answer);
+    document.getElementById('qa-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') answer();
+    });
+    function answer() {
+      const q = document.getElementById('qa-input').value.toLowerCase().trim();
+      const out = document.getElementById('qa-answer');
+      if (!q) {
+        out.textContent = 'من فضلك اكتب سؤالك.';
+        return;
+      }
+      // نمط "سعر X"
+      let m = q.match(/سعر\s+([\u0600-\u06FF0-9A-Za-z\s]+)/i);
+      if (m) {
+        const name = m[1].trim().toLowerCase();
+        for (let cat in catalog) {
+          let found = catalog[cat].find(i => i.n.toLowerCase() === name);
+          if (found) {
+            document.querySelector(`.section-header[data-id="${cat}"]`).click();
+            out.innerHTML = `
+              <strong>${found.n}</strong><br>
+              💰 السعر: ${found.p.toLocaleString()} ج.م.<br>
+              <img src="${found.img}" style="width:120px;margin:10px 0;" onerror="this.src='https://via.placeholder.com/120?text=No+Image'"><br>
+              <a href="${found.l}" target="_blank">🔗 رابط الشراء</a>`;
+            return;
+          }
+        }
+        out.textContent = '❓ المنتج غير موجود.';
+        return;
+      }
+      // الاسم المباشر
+      for (let cat in catalog) {
+        let found = catalog[cat].find(i => q.includes(i.n.toLowerCase()));
+        if (found) {
+          document.querySelector(`.section-header[data-id="${cat}"]`).click();
+          out.innerHTML = `
+            <strong>${found.n}</strong><br>
+            💰 السعر: ${found.p.toLocaleString()} ج.م.<br>
+            <img src="${found.img}" style="width:120px;margin:10px 0;" onerror="this.src='https://via.placeholder.com/120?text=No+Image'"><br>
+            <a href="${found.l}" target="_blank">🔗 رابط الشراء</a>`;
+          return;
+        }
+      }
+      out.textContent = '❓ حاول صياغة سؤالك مثلاً: "كم سعر RTX 4060؟"';
     }
   </script>
 </body>
