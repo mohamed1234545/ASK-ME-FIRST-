@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🛠️ تجميعات الكمبيوتر حسب ميزانيتك</title>
+    <style>
+        :root {
+            --bg-light: #f5f5f5;
+            --text-light: #222;
+            --card-light: #fff;
+            --bg-dark: #121212;
+            --text-dark: #eee;
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --accent: #f39c12;
+            --transition: all 0.3s ease-in-out;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: linear-gradient(to bottom right, #e0f7fa, #c5e1a5); /* تدرج لوني بسيط للخلفية */
+        }
+
+        body.dark-theme {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+            background-image: linear-gradient(to bottom right, #37474f, #263238); /* تدرج لوني للوضع الداكن */
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: var(--card-light);
+            box-shadow: var(--shadow-light);
+            border-radius: 12px; /* حواف مدورة أكتر */
+            transition: var(--transition);
+        }
+
+        body.dark-theme .container {
+            background-color: var(--card-dark);
+            box-shadow: var(--shadow-dark);
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* ظل للنص */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--primary-dark); /* لون مختلف للـ Label */
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05); /* ظل داخلي */
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.4); /* تأثير توهج عند التركيز */
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px); /* حركة بسيطة عند الـ Hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        #suggestion-container {
+            margin-top: 30px;
+            padding: 25px;
+            background-color: var(--card-light);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            animation: fadeIn 0.5s ease-out; /* تأثير ظهور */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body.dark-theme #suggestion-container {
+            background-color: var(--card-dark);
+            box-shadow: var(--shadow-dark);
+        }
+
+        #suggestion h3 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        #suggestion ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #suggestion li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #ddd; /* خط منقط للفصل */
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center; /* تعديل لمحاذاة العناصر للوسط */
+            align-items: center;
+        }
+
+        body.dark-theme #suggestion li {
+            border-bottom-color: #333;
+        }
+
+        #suggestion li:last-child {
+            border-bottom: none;
+        }
+
+        #suggestion li:hover {
+            background-color: #f9f9f9;
+            transform: translateX(5px); /* حركة بسيطة عند الـ Hover */
+        }
+
+        body.dark-theme #suggestion li:hover {
+            background-color: #2a2a2a;
+        }
+
+        #suggestion li span {
+            font-weight: bold;
+            color: var(--text-light);
+            margin-left: 10px; /* مسافة بين الأيموجي والنص */
+        }
+
+        body.dark-theme #suggestion li span {
+            color: var(--text-dark);
+        }
+
+        #suggestion img {
+            max-width: 180px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+        }
+
+        #theme-toggle {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--primary); /* حدود للأيقونة */
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            align-self: center;
+            margin-top: 30px;
+            transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        body.dark-theme #theme-toggle {
+            color: var(--text-dark);
+            border-color: var(--accent);
+        }
+
+        #theme-toggle:hover {
+            color: white;
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        body.dark-theme #theme-toggle:hover {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        p a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        p a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* تنسيق عرض التجميعات */
+        .build-info {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease, transform 0.2s ease-in-out;
+            background-color: var(--card-light);
+            text-align: center; /* محاذاة العناصر الداخلية للوسط */
+        }
+
+        body.dark-theme .build-info {
+            border-color: #333;
+            background-color: var(--card-dark);
+        }
+
+        .build-info:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02); /* تكبير بسيط عند الـ Hover */
+        }
+
+        .build-details {
+            margin-bottom: 15px;
+        }
+
+        .build-details h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .build-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .build-details li {
+            padding: 8px 0;
+            display: flex;
+            justify-content: center; /* محاذاة العناصر للوسط */
+            align-items: center;
+        }
+
+        .build-details li span {
+            font-weight: bold;
+            margin-left: 10px;
+            color: var(--text-light);
+        }
+
+        body.dark-theme .build-details li span {
+            color: var(--text-dark);
+        }
+
+        .build-price {
+            font-size: 1.4rem;
+            color: var(--accent);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        }
+
+        .build-features {
+            margin-top: 10px;
+            padding: 10px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: var(--primary-dark);
+            font-style: italic;
+        }
+
+        body.dark-theme .build-features {
+            border-top-color: #333;
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <div class="container">
+        <h1>🛠️ اختر ميزانيتك وهنقولك أحسن تجميعة!</h1>
+        <label for="budget">أدخل ميزانيتك بالجنيه المصري:</label>
+        <input type="number" id="budget" name="budget" placeholder="مثال: 15000">
+        <button onclick="getSuggestion()">اقتراح تجميعة</button>
+        <div id="suggestion-container" style="display: none;">
+            <div id="suggestion"></div>
+        </div>
+        <button id="theme-toggle">☀️ الوضع النهاري</button>
+        <p><a href="index.html">العودة للصفحة الرئيسية</a></p>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const suggestionDiv = document.getElementById('suggestion');
+        const suggestionContainer = document.getElementById('suggestion-container');
+
+        const toggleTheme = () => {
+            body.classList.toggle('dark-theme');
+            themeToggle.textContent = body.classList.contains('dark-theme') ? '☀️ الوضع النهاري' : '🌙 الوضع الليلي';
+        };
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        const buildsData = [
+            {
+                "اسم": "تجميعة اقتصادية",
+                "السعر_الكلي": 7200,
+                "القطع": [
+                    {"النوع": "المعالج", "الموديل": "Intel Core i3-10100F", "ايموجي": "⚙️"},
+                    {"النوع": "اللوحة الأم", "الموديل": "H510", "ايموجي": " motherboard"},
+                    {"النوع": "الرام", "الموديل": "8GB DDR4 2666MHz", "ايموجي": " memory"},
+                    {"النوع": "كرت الشاشة", "الموديل": "GT 1030 2GB", "ايموجي": " ️"},
+                    {"النوع": "وحدة التخزين", "الموديل": "240GB SATA SSD", "ايموجي": " 💾"},
+                    {"النوع": "مزود طاقة", "الموديل": "350W", "ايموجي": " ⚡"},
+                    {"النوع": "كيسة", "الموديل": "عادية", "ايموجي": " 📦"},
+                    {"النوع": "شاشة", "الموديل": "مستعملة 19\" أو 22\" LED", "ايموجي": " 🖥️"},
+                    {"النوع": "كيبورد + ماوس", "الموديل": "مجموعة بسيطة سلكية", "ايموجي": " 🖱️⌨️"}
+                ],
+                "ملاحظات": "إذا كنت تريد الأداء الأفضل بدون كرت شاشة خارجي، خذ Ryzen 5 5600G...",
+                "صورة": "images/economic.jpg",
+                "مميزات": "سعر اقتصادي للمهام الأساسية وتصفح الإنترنت."
+            },
+            {
+                "اسم": "تجميعة متوازنة",
+                "السعر_الكلي": 10000,
+                "القطع": [
+                    {"النوع": "المعالج", "الموديل": "AMD Ryzen 5 5600G", "ايموجي": "⚙️"},
+                    {"النوع": "اللوحة الأم", "الموديل": "A520M أو B450M", "ايموجي": " motherboard"},
+                    {"النوع": "الرام", "الموديل": "8GB DDR4 3200MHz", "ايموجي": " memory"},
+                    {"النوع": "التخزين", "الموديل": "240GB SSD SATA", "ايموجي": " 💾"},
+                    {"النوع": "مزود طاقة", "الموديل": "400W", "ايموجي": " ⚡"},
+                    {"النوع": "الكيسة", "الموديل": "عادية", "ايموجي": " 📦"},
+                    {"النوع": "الشاشة", "الموديل": "22 بوصة LED مستعملة", "ايموجي": " 🖥️"},
+                    {"النوع": "كيبورد وماوس", "الموديل": "طقم عادي سلكي", "ايموجي": " 🖱️⌨️"}
+                ],
+                "مميزات": "Ryzen 5 5600G فيه كرت شاشة مدمج لأداء رسومي معقول بدون كرت منفصل.",
+                "صورة": "images/balanced.jpg"
+            },
+            {
+                "اسم": "تجميعة قوية (15000)",
+                "السعر_الكلي": 15000,
+                "القطع": [
+                    {"النوع": "المعالج", "الموديل": "Intel Core i5-12400F", "ايموجي": "⚙️"},
+                    {"النوع": "اللوحة الأم", "الموديل": "H610M أو B660M", "ايموجي": " motherboard"},
+                    {"النوع": "الرام", "الموديل": "16GB DDR4 3200MHz", "ايموجي": " memory"},
+                    {"النوع": "كرت الشاشة", "الموديل": "GTX 1650 4GB GDDR6", "ايموجي": " ️"},
+                    {"النوع": "التخزين", "الموديل": "480GB SSD SATA", "ايموجي": " 💾"},
+                    {"النوع": "مزود طاقة", "الموديل": "500W", "ايموجي": " ⚡"},
+                    {"النوع": "الكيسة", "الموديل": "بمراوح RGB", "ايموجي": " 📦"},
+                    {"النوع": "الشاشة", "الموديل": "22 أو 24 بوصة LED", "ايموجي": " 🖥️"},
+                    {"النوع": "كيبورد وماوس", "الموديل": "طقم جيد سلكي", "ايموجي": " 🖱️⌨️"}
+                ],
+                "مميزات": "i5-12400F + GTX 1650 يقدم أداء ممتاز للألعاب الحديثة على إعدادات متوسطة.",
+                "صورة": "images/powerful_15k.jpg"
+            },
+            {
+                "اسم": "تجميعة قوية (20000)",
+                "السعر_الكلي": 20000,
+                "القطع": [
+                    {"النوع": "المعالج", "الموديل": "AMD Ryzen 5 5600", "ايموجي": "⚙️"},
+                    {"النوع": "اللوحة الأم", "الموديل": "B550M أو B450M", "ايموجي": " motherboard"},
+                    {"النوع": "الرام", "الموديل": "16GB DDR4 3200MHz", "ايموجي": " memory"},
+                    {"النوع": "كرت الشاشة", "الموديل": "NVIDIA GeForce RTX 3050 8GB", "ايموجي": " ️"},
+                    {"النوع": "التخزين", "الموديل": "500GB NVMe M.2 SSD", "ايموجي": " 💾"},
+                    {"النوع": "مزود طاقة", "الموديل": "550W 80+ Bronze", "ايموجي": " ⚡"},
+                    {"النوع": "الكيسة", "الموديل": "احترافية بمراوح", "ايموجي": " 📦"},
+                    {"النوع": "الشاشة", "الموديل": "24 بوصة Full HD IPS", "ايموجي": " 🖥️"},
+                    {"النوع": "كيبورد وماوس", "الموديل": "طقم جيد", "ايموجي": " 🖱️⌨️"}
+                ],
+                "مميزات": "RTX 3050 أو RX 6600 أقوياء جدًا لتجربة لعب ممتازة على إعدادات عالية.",
+                "صورة": "images/powerful_20k.jpg"
+            },
+            {
+                "اسم": "تجميعة احترافية (25000)",
+                "السعر_الكلي": 25000,
+                "القطع": [
+                    {"النوع": "المعالج", "الموديل": "AMD Ryzen 5 7600", "ايموجي": "⚙️"},
+                    {"النوع": "اللوحة الأم", "الموديل": "B650M", "ايموجي": " motherboard"},
+                    {"النوع": "الرام", "الموديل": "16GB DDR5 5200MHz", "ايموجي": " memory"},
+                    {"النوع": "كرت الشاشة", "الموديل": "RTX 4060 8GB", "ايموجي": " ️"},
+                    {"النوع": "التخزين", "الموديل": "1TB M.2 NVMe SSD", "ايموجي": " 💾"},
+                    {"النوع": "مزود طاقة", "الموديل": "650W 80+ Bronze", "ايموجي": " ⚡"},
+                    {"النوع": "الكيسة", "الموديل": "جيدة بتبريد ممتاز", "ايموجي": " 📦"},
+                    {"النوع": "الشاشة", "الموديل": "24 – 27 بوصة، Full HD/144Hz", "ايموجي": " 🖥️"},
+                    {"النوع": "كيبورد وماوس", "الموديل": "طقم Gaming", "ايموجي": " 🖱️⌨️"}
+                ],
+                "مميزات": "RTX 4060 أو RX 6700 XT أقوياء جدًا لتشغيل الألعاب على إعدادات عالية جدًا ومعدل إطارات مرتفع.",
+                "صورة": "images/professional_25k.jpg"
+            },
+            {
+                "اسم": "تجميعة احترافية (30000)",
+                "السعر_الكلي": 30000,
+                "القطع": [
+                    {"النوع": "المعالج", "الموديل": "Intel Core i5-13600KF", "ايموجي": "⚙️"},
+                    {"النوع": "اللوحة الأم", "الموديل": "B660M", "ايموجي": " motherboard"},
+                    {"النوع": "الرام", "الموديل": "32GB DDR5 5200MHz", "ايموجي": " memory"},
+                    {"النوع": "كرت الشاشة", "الموديل": "NVIDIA RTX 4060 Ti 8GB", "ايموجي": " ️"},
+                    {"النوع": "التخزين", "الموديل": "1TB NVMe Gen 4 SSD", "ايموجي": " 💾"},
+                    {"النوع": "مزود طاقة", "الموديل": "650W أو 750W 80+ Bronze/Gold", "ايموجي": " ⚡"},
+                    {"النوع": "الكيسة", "الموديل": "تهوية ممتازة", "ايموجي": " 📦"},
+                    {"النوع": "الشاشة", "الموديل": "27 بوصة – 2K QHD", "ايموجي": " 🖥️"},
+                    {"النوع": "كيبورد وماوس", "الموديل": "Gaming Combo بسيط", "ايموجي": " 🖱️⌨️"}
+                ],
+                "مميزات": "RTX 4060 Ti أو RX 6800 يقدمون أداء خرافي على دقة 2K مع تتبع الأشعة.",
+                "صورة": "images/professional_30k.jpg"
+            },
+            {
+                "اسم": "تجميعة خارقة (35000)",
+                "السعر_الكلي": 35000,
+                "القطع": [
+                    {"النوع": "المعالج", "الموديل": "Intel Core i5-14600KF", "ايموجي": "⚙️"},
+                    {"النوع": "اللوحة الأم", "الموديل": "Z690 / B760", "ايموجي": " motherboard"},
+                    {"النوع": "الرام", "الموديل": "32GB DDR5 6000MHz", "ايموجي": " memory"},
+                    {"النوع": "كرت الشاشة", "الموديل": "NVIDIA RTX 4070 12GB", "ايموجي": " ️"},
+                    {"النوع": "التخزين", "الموديل": "1TB M.2 NVMe Gen4 SSD", "ايموجي": " 💾"},
+                    {"النوع": "مزود طاقة", "الموديل": "750W 80+ Gold", "ايموجي": " ⚡"},
+                    {"النوع": "الكيسة", "الموديل": "تهوية ممتازة مع RGB", "ايموجي": " 📦"},
+                    {"النوع": "الشاشة", "الموديل": "27 بوصة QHD 144Hz", "ايموجي": " 🖥️"},
+                    {"النوع": "كيبورد وماوس", "الموديل": "Gaming Combo ممتاز", "ايموجي": " 🖱️⌨️"}
+                ],
+                "مميزات": "RTX 4070 / RX 7800 XT = كروت فلاجشيب تقريبًا لأداء قوي على QHD وبعض تجارب 4K.",
+                "صورة": "images/ultimate_35k.jpg"
+            },
+            {
+                "اسم": "تجميعة خارقة (40000)",
+                "السعر_الكلي": 40000,
+                "القطع": [
+                    {"النوع": "المعالج", "الموديل": "AMD Ryzen 7 7800X3D", "ايموجي": "⚙️"},
+                    {"النوع": "اللوحة الأم", "الموديل": "B650", "ايموجي": " motherboard"},
+                    {"النوع": "الرام", "الموديل": "32GB DDR5 6000MHz", "ايموجي": " memory"},
+                    {"النوع": "كرت الشاشة", "الموديل": "NVIDIA RTX 4070 Ti", "ايموجي": " ️"},
+                    {"النوع": "التخزين", "الموديل": "1TB NVMe Gen4 SSD", "ايموجي": " 💾"},
+                    {"النوع": "مزود طاقة", "الموديل": "750W – 850W 80+ Gold", "ايموجي": " ⚡"},
+                    {"النوع": "الكيسة", "الموديل": "Full Tower تهوية ممتازة", "ايموجي": " 📦"},
+                    {"النوع": "الشاشة", "الموديل": "27 بوصة QHD 165Hz IPS", "ايموجي": " 🖥️"},
+                    {"النوع": "كيبورد والماوس", "الموديل": "Gaming Combo (ميكانيكال + ماوس RGB)", "ايموجي": " 🖱️⌨️"}
+                ],
+                "مميزات": "أداء ألعاب 4K Ultra + Ray Tracing بسهولة مع معالج قوي وكرت شاشة فئة عليا.",
+                "صورة": "images/ultimate_40k.jpg"
+            }
+        ];
+
+        function getSuggestion() {
+            const budgetInput = document.getElementById('budget');
+            const budget = parseInt(budgetInput.value);
+            suggestionDiv.textContent = `جاري البحث عن أفضل تجميعة بميزانية ${budget} جنيه...`;
+            suggestionContainer.style.display = 'block';
+
+            let closestBuild = null;
+            let affordableBuilds = buildsData.filter(build => build.السعر_الكلي <= budget);
+
+            if (affordableBuilds.length > 0) {
+                affordableBuilds.sort((a, b) => b.السعر_الكلي - a.السعر_الكلي);
+                closestBuild = affordableBuilds[0];
+            }
+
+            if (closestBuild) {
+                let suggestionHTML = `<div class="build-info">`;
+                suggestionHTML += `<div class="build-details"><h3>${closestBuild.اسم}</h3><ul>`;
+                closestBuild.القطع.forEach(item => {
+                    suggestionHTML += `<li><span>${item.ايموجي || ''} ${item.النوع}:</span> ${item.الموديل}</li>`;
+                });
+                suggestionHTML += `</ul>`;
+                if (closestBuild.مميزات) {
+                    suggestionHTML += `<div class="build-features">✨ ${closestBuild.مميزات}</div>`;
+                }
+                suggestionHTML += `<div class="build-price">${closestBuild.السعر_الكلي} جنيه</div></div></div>`;
+                suggestionDiv.innerHTML = suggestionHTML;
+            } else {
+                suggestionDiv.textContent = "لا توجد تجميعة مناسبة لهذه الميزانية حاليًا.";
+            }
+        }
+    </script>
+</body>
+</html>
