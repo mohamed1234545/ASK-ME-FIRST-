@@ -2,552 +2,1258 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>💻 مساعد الكمبيوتر الذكي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر الأجهزة الإلكترونية</title>
     <style>
-        :root {
-            --bg-light: #f5f5f5;
-            --text-light: #222;
-            --card-light: #fff;
-            --bg-dark: #121212;
-            --text-dark: #eee;
-            --card-dark: #1e1e1e;
-            --primary: #3498db;
-            --primary-dark: #2980b9;
-            --transition: all 0.4s ease;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* --- نفس الـ CSS السابق مع تعديلات طفيفة لتناسب العناصر الجديدة --- */
         body {
-            font-family: 'Cairo', sans-serif;
-            background: var(--bg-light);
-            color: var(--text-light);
-            transition: var(--transition);
-            padding-top: 60px;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            color: #eee;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        body.dark { background: var(--bg-dark); color: var(--text-dark); }
+        body.light-mode {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            margin: 20px auto;
+        }
         header {
-            position: fixed; top: 0; left: 0; right: 0;
-            background: var(--primary); color: #fff;
-            text-align: center; padding: 15px; font-size: 1.5rem;
-            z-index: 1000;
-        }
-        #theme-toggle {
-            position: fixed; top: 15px; left: 15px;
-            background: none; border: none; font-size: 24px;
-            cursor: pointer; transition: transform .6s; z-index: 1001;
-        }
-        #theme-toggle.rotate { transform: rotate(180deg); }
-        #theme-toggle:focus { outline: none; } /* إزالة اللون الأزرق */
-
-        /* زرار صفحة التجميعات */
-        .builds-button-container {
-            text-align: center;
-            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
             margin-bottom: 20px;
         }
-        .builds-button {
-            padding: 12px 24px;
-            background-color: var(--primary);
+        header h1 {
+            margin: 0;
+        }
+        nav a {
+            color: #eee;
+            text-decoration: none;
+            margin-left: 15px;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #bbb;
+        }
+        body.light-mode nav a {
+            color: #333;
+        }
+        body.light-mode nav a:hover {
+            color: #555;
+        }
+        #theme-toggle {
+            background: none;
+            border: none;
+            color: #eee;
+            font-size: 1.5em;
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.5s ease, color 0.3s ease;
+        }
+        #theme-toggle.light-mode {
+            color: #333;
+        }
+        #theme-toggle.rotated {
+            transform: rotate(360deg);
+        }
+        .search-container {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        #search-input {
+            padding: 10px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: #eee;
+            border-radius: 5px 0 0 5px;
+            flex-grow: 1;
+        }
+        body.light-mode #search-input {
+            background-color: #fff;
+            color: #333;
+            border-color: #ccc;
+        }
+        #search-button {
+            padding: 10px 15px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #search-button:hover {
+            background-color: #4cae4c;
+        }
+        #ask-button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 1.1rem; /* تكبير الخط شوية */
+            transition: background-color 0.3s ease;
+            margin-bottom: 10px;
+        }
+        #ask-button:hover {
+            background-color: #0056b3;
+        }
+        .section {
+            margin-bottom: 20px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #333;
+        }
+        body.light-mode .section {
+            background-color: #fff;
+            border-color: #ccc;
+        }
+        .section-header-container {
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #444;
+            color: #eee;
             transition: background-color 0.3s ease;
         }
-        .builds-button:hover {
-            background-color: var(--primary-dark);
-        }
-
-        /* قسم الأسئلة */
-        .qa {
-            max-width: 500px; margin: 0 auto 20px; /* تقليل المارجن العلوي */
-            display: flex; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-radius: 8px; overflow: hidden;
-            background: var(--card-light); transition: background .4s;
-        }
-        body.dark .qa { background: var(--card-dark); }
-        .qa input {
-            flex: 1; padding: 12px; border: none; outline: none;
-            font-size: 1rem; background: transparent; color: inherit;
-        }
-        .qa button {
-            padding: 0 20px; border: none;
-            background: var(--primary); color: #fff;
-            cursor: pointer; transition: background .3s;
-        }
-        .qa button:hover { background: var(--primary-dark); }
-        #qa-answer {
-            max-width: 500px; margin: 10px auto 20px;
-            padding: 15px; background: var(--card-light);
-            border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            min-height: 60px; transition: background .4s;
-        }
-        body.dark #qa-answer { background: var(--card-dark); }
-
-        /* الأقسام */
-        .sections {
-            max-width: 1000px; margin: 0 auto 40px; padding: 0 10px;
-        }
-        .section { margin-bottom: 20px; }
-        .section-header-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--primary);
-            color: #fff;
-            padding: 12px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background .3s;
-            user-select: none;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        body.light-mode .section-header-container {
+            background-color: #ddd;
+            color: #333;
         }
         .section-header-container:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            background-color: #555;
         }
-        .sort-options {
-            display: flex;
-            gap: 10px;
+        body.light-mode .section-header-container:hover {
+            background-color: #ccc;
         }
-        .sort-button {
-            background: none;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            font-size: 0.9rem;
-            opacity: 0.8;
-            transition: opacity 0.3s, background-color 0.2s;
-            padding: 0;
-        }
-        .sort-button:hover {
-            opacity: 1;
-        }
-        .sort-button:active {
-            background-color: var(--primary-dark);
-        }
-        .section-title {
-            flex-grow: 1;
-            text-align: right;
-            margin-right: 15px;
+        .section-header {
+            font-weight: bold;
         }
         .section-header-arrow {
-            margin-left: 10px;
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
         }
-        .section-header-arrow::after {
-            content: '▼';
-            transition: transform .3s;
+        .section-header-arrow.open {
+            transform: rotate(90deg);
         }
-        .section-header-arrow.open::after {
-            transform: rotate(180deg);
+        .section-content {
+            padding: 15px;
+            display: none;
         }
-        .content {
-            display: none; margin-top: 10px; animation: fadeIn .3s ease-out;
+        .section-content.visible {
+            display: block;
         }
-        .content.visible { display: block; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(-5px);} to { opacity:1; transform:translateY(0);} }
-
-        /* بطاقات المنتجات */
         .products {
-            display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
-            gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
         .product {
-            background: var(--card-light); border-radius: 8px;
-            overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            text-align: center; transition: transform .3s, box-shadow .3s, background .4s, opacity .2s;
-            cursor: pointer;
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            background-color: #444;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer; /* لجعل المنتج قابل للنقر لعرض التفاصيل */
         }
-        body.dark .product { background: var(--card-dark); }
+        body.light-mode .product {
+            background-color: #eee;
+            border-color: #bbb;
+        }
         .product:hover {
-            transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            opacity: 0.9;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        body.light-mode .product:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         .product img {
-            width: 100%; height: 140px; object-fit: cover; background: #ddd;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
         }
-        .details {
-            padding: 10px;
+        .product h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 1.1em;
         }
-        .details h3 {
-            font-size: 1rem; margin: 8px 0;
+        .product .price {
+            color: #5cb85c;
+            margin-bottom: 5px;
         }
-        .details p {
-            font-size: 0.9rem; margin: 6px 0;
+        .product .rating {
+            color: gold;
+            margin-bottom: 10px;
         }
-        .details a {
-            display: inline-block; margin-top: 8px;
-            padding: 6px 12px; background: var(--primary);
-            color: #fff; border-radius: 4px;
-            text-decoration: none; transition: background .3s;
+        .product button {
+            padding: 8px 12px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
         }
-        .details a:hover { background: var(--primary-dark); }
-
-        /* تجاوب على الموبايل */
-        @media(max-width:600px){
-            .products { grid-template-columns:1fr; }
-            .qa { flex-direction:column; }
-            .qa input, .qa button { width:100%; border-radius:0; }
-            .qa button { margin-top:5px; }
+        .product .details-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .product .details-btn:hover {
+            background-color: #0056b3;
+        }
+        .product .favorite-btn {
+            background-color: #f0ad4e;
+            color: white;
+        }
+        .product .favorite-btn.active {
+            background-color: #d9534f;
+        }
+        .product .favorite-btn:hover {
+            background-color: #eea236;
+        }
+        .sort-filter-controls {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .filter-select {
+            padding: 8px 15px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #444;
+            color: #eee;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.light-mode .filter-select {
+            border-color: #ccc;
+            background-color: #eee;
+            color: #333;
+        }
+        .filter-select:hover {
+            background-color: #555;
+            color: #eee;
+        }
+        body.light-mode .filter-select:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+        .range-filter-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .range-filter-container input[type="number"] {
+            padding: 8px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #333;
+            color: #eee;
+            width: 80px;
+        }
+        body.light-mode .range-filter-container input[type="number"] {
+            border-color: #ccc;
+            background-color: #fff;
+            color: #333;
+        }
+        .range-filter-container button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .range-filter-container button:hover {
+            background-color: #0056b3;
+        }
+        /* --- Modal لعرض تفاصيل المنتج --- */
+        #product-details-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: #333;
+            color: #eee;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 50px auto;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+        body.light-mode .modal-content {
+            background-color: #fff;
+            color: #333;
+        }
+        .close-modal-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #eee;
+        }
+        body.light-mode .close-modal-btn {
+            color: #333;
+        }
+        .product-full-details img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        .product-full-details h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .product-full-details p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .product-full-details .price {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .product-full-details .rating {
+            font-size: 1.1em;
+            margin-bottom: 15px;
         }
     </style>
 </head>
-<body class="dark">
-    <button id="theme-toggle"><span id="theme-icon">☀️</span></button>
-    <header>💻 مساعد الكمبيوتر الذكي</header>
+<body class="dark-mode">
+    <div class="container">
+        <header>
+            <h1>متجر الأجهزة الإلكترونية</h1>
+            <nav>
+                <button id="theme-toggle">🌙</button>
+                <a href="favorites.html" id="favorites-link">المفضلة</a>
+                <a href="builds.html" id="smart-builds-link">التجميعات الذكية</a>
+            </nav>
+        </header>
 
-    <div class="builds-button-container">
-        <button class="builds-button" onclick="window.location.href='builds.html'">عرض صفحة التجميعات الذكية</button>
-    </div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="ابحث عن منتج...">
+            <button id="search-button">بحث</button>
+        </div>
+        <button id="ask-button">أسئلة شائعة</button>
 
-    <div class="qa">
-        <input id="qa-input" placeholder="مثال: كم سعر RTX 3060؟">
-        <button id="qa-btn">اسأل</button>
-    </div>
-    <div id="qa-answer"></div>
+        <div class="section" id="graphicsCards-section">
+            <div class="section-header-container">
+                <h2 class="section-header">كروت الشاشة</h2>
+                <span class="section-header-arrow open">▼</span>
+            </div>
+            <div class="section-content visible" id="graphicsCards-products">
+                <div class="sort-filter-controls">
+                    <div class="range-filter-container">
+                        <label for="min-price-graphicsCards">السعر من:</label>
+                        <input type="number" id="min-price-graphicsCards" placeholder="أقل سعر">
+                        <label for="max-price-graphicsCards">إلى:</label>
+                        <input type="number" id="max-price-graphicsCards" placeholder="أعلى سعر">
+                        <button class="apply-range-filter" data-category="graphicsCards">تطبيق</button>
+                    </div>
+                </div>
+                <div class="products">
+                    </div>
+            </div>
+        </div>
 
-    <div class="sections">
-        <div class="section">
-            <div class="section-header-container" data-id="gpus">
-                <div class="section-title section-header-arrow">🎮 كروت الشاشة</div>
-                <div class="sort-options">
-                    <button class="sort-button" data-sort="price-asc">الأرخص</button>
-                    <button class="sort-button" data-sort="price-desc">الأغلى</button>
-                </div>
+        <div class="section" id="processors-section">
+            <div class="section-header-container">
+                <h2 class="section-header">المعالجات</h2>
+                <span class="section-header-arrow">▼</span>
             </div>
-            <div class="content" id="gpus"><div class="products"></div></div>
-        </div>
-        <div class="section">
-            <div class="section-header-container" data-id="cpus">
-                <div class="section-title section-header-arrow">🧠 المعالجات</div>
-                <div class="sort-options">
-                    <button class="sort-button" data-sort="price-asc">الأرخص</button>
-                    <button class="sort-button" data-sort="price-desc">الأغلى</button>
+            <div class="section-content" id="processors-products">
+                <div class="sort-filter-controls">
+                    <div class="range-filter-container">
+                        <label for="min-price-processors">السعر من:</label>
+                        <input type="number" id="min-price-processors" placeholder="أقل سعر">
+                        <label for="max-price-processors">إلى:</label>
+                        <input type="number" id="max-price-processors" placeholder="أعلى سعر">
+                        <button class="apply-range-filter" data-category="processors">تطبيق</button>
+                    </div>
                 </div>
+                <div class="products">
+                    </div>
             </div>
-            <div class="content" id="cpus"><div class="products"></div></div>
         </div>
-        <div class="section">
-            <div class="section-header-container" data-id="ram">
-                <div class="section-title section-header-arrow">💾 الذاكرة العشوائية (RAM)</div>
-                <div class="sort-options">
-                    <button class="sort-button" data-sort="price-asc">الأرخص</button>
-                    <button class="sort-button" data-sort="price-desc">الأغلى</button>
+
+        <div class="section" id="memory-section">
+            <div class="section-header-container">
+                <h2 class="section-header">الذاكرة العشوائية (RAM)</h2>
+                <span class="section-header-arrow">▼</span>
+            </div>
+            <div class="section-content" id="memory-products">
+                <div class="sort-filter-controls">
+                    <div class="range-filter-container">
+                        <label for="min-price-memory">السعر من:</label>
+                        <input type="number" id="min-price-memory" placeholder="أقل سعر">
+                        <label for="max-price-memory">إلى:</label>
+                        <input type="number" id="max-price-memory" placeholder="أعلى سعر">
+                        <button class="apply-range-filter" data-category="memory">تطبيق</button></div>
+                <div class="products">
+                    </div>
+            </div>
+        </div>
+
+        <div class="section" id="storage-section">
+            <div class="section-header-container">
+                <h2 class="section-header">وحدات التخزين</h2>
+                <span class="section-header-arrow">▼</span>
+            </div>
+            <div class="section-content" id="storage-products">
+                <div class="sort-filter-controls">
+                    <div class="range-filter-container">
+                        <label for="min-price-storage">السعر من:</label>
+                        <input type="number" id="min-price-storage" placeholder="أقل سعر">
+                        <label for="max-price-storage">إلى:</label>
+                        <input type="number" id="max-price-storage" placeholder="أعلى سعر">
+                        <button class="apply-range-filter" data-category="storage">تطبيق</button>
+                    </div>
                 </div>
+                <div class="products">
+                    </div>
             </div>
-            <div class="content" id="ram"><div class="products"></div></div>
         </div>
-        <div class="section">
-            <div class="section-header-container" data-id="storage">
-                <div class="section-title section-header-arrow">💾 التخزين (SSD/HDD)</div>
-                <div class="sort-options">
-                    <button class="sort-button" data-sort="price-asc">الأرخص</button>
-                    <button class="sort-button" data-sort="price-desc">الأغلى</button>
+
+        <div class="section" id="headphones-section">
+            <div class="section-header-container">
+                <h2 class="section-header">السماعات</h2>
+                <span class="section-header-arrow">▼</span>
+            </div>
+            <div class="section-content" id="headphones-products">
+                <div class="sort-filter-controls">
+                    <div class="range-filter-container">
+                        <label for="min-price-headphones">السعر من:</label>
+                        <input type="number" id="min-price-headphones" placeholder="أقل سعر">
+                        <label for="max-price-headphones">إلى:</label>
+                        <input type="number" id="max-price-headphones" placeholder="أعلى سعر">
+                        <button class="apply-range-filter" data-category="headphones">تطبيق</button>
+                    </div>
                 </div>
+                <div class="products">
+                    </div>
             </div>
-            <div class="content" id="storage"><div class="products"></div></div>
         </div>
-        <div class="section">
-            <div class="section-header-container" data-id="motherboards">
-                <div class="section-title section-header-arrow">🖥️ اللوحات الأم</div>
-                <div class="sort-options">
-                    <button class="sort-button" data-sort="price-asc">الأرخص</button>
-                    <button class="sort-button" data-sort="price-desc">الأغلى</button>
+
+        <div class="section" id="keyboards-section">
+            <div class="section-header-container">
+                <h2 class="section-header">الكيبوردات</h2>
+                <span class="section-header-arrow">▼</span>
+            </div>
+            <div class="section-content" id="keyboards-products">
+                <div class="sort-filter-controls">
+                    <div class="range-filter-container">
+                        <label for="min-price-keyboards">السعر من:</label>
+                        <input type="number" id="min-price-keyboards" placeholder="أقل سعر">
+                        <label for="max-price-keyboards">إلى:</label>
+                        <input type="number" id="max-price-keyboards" placeholder="أعلى سعر">
+                        <button class="apply-range-filter" data-category="keyboards">تطبيق</button>
+                    </div>
                 </div>
+                <div class="products">
+                    </div>
             </div>
-            <div class="content" id="motherboards"><div class="products"></div></div>
         </div>
-        <div class="section">
-            <div class="section-header-container" data-id="psus">
-                <div class="section-title section-header-arrow">🔌 مزود الطاقة (PSU)</div>
-                <div class="sort-options">
-                    <button class="sort-button" data-sort="price-asc">الأرخص</button>
-                    <button class="sort-button" data-sort="price-desc">الأغلى</button>
+
+        <div class="section" id="mice-section">
+            <div class="section-header-container">
+                <h2 class="section-header">الماوسات</h2>
+                <span class="section-header-arrow">▼</span>
+            </div>
+            <div class="section-content" id="mice-products">
+                <div class="sort-filter-controls">
+                    <div class="range-filter-container">
+                        <label for="min-price-mice">السعر من:</label>
+                        <input type="number" id="min-price-mice" placeholder="أقل سعر">
+                        <label for="max-price-mice">إلى:</label>
+                        <input type="number" id="max-price-mice" placeholder="أعلى سعر">
+                        <button class="apply-range-filter" data-category="mice">تطبيق</button>
+                    </div>
                 </div>
+                <div class="products">
+                    </div>
             </div>
-            <div class="content" id="psus"><div class="products"></div></div>
         </div>
-        <div class="section">
-            <div class="section-header-container" data-id="cooling">
-                <div class="section-title section-header-arrow">❄️ التبريد</div>
-                <div class="sort-options">
-                    <button class="sort-button" data-sort="price-asc">الأرخص</button>
-                    <button class="sort-button" data-sort="price-desc">الأغلى</button>
-                </div>
+
+        <div id="product-details-modal">
+            <div class="modal-content">
+                <button class="close-modal-btn">&times;</button>
+                <div class="product-full-details">
+                    <img src="" alt="صورة المنتج" id="modal-image">
+                    <h2 id="modal-title"></h2>
+                    <p id="modal-details"></p>
+                    <p class="price" id="modal-price"></p>
+                    <p class="rating" id="modal-rating"></p>
+                    </div>
             </div>
-            <div class="content" id="cooling"><div class="products"></div></div>
         </div>
-        <div class="section">
-            <div class="section-header-container" data-id="keyboards">
-                <div class="section-title section-header-arrow">⌨️ الكيبوردات</div>
-                <div class="sort-options">
-                    <button class="sort-button" data-sort="price-asc">الأرخص</button>
-                    <button class="sort-button" data-sort="price-desc">الأغلى</button>
-                </div>
-            </div>
-            <div class="content" id="keyboards"><div class="products"></div></div>
-        </div>
-        <div class="section">
-            <div class="section-header-container" data-id="mice">
-                <div class="section-title section-header-arrow">🖱️ الماوسات</div>
-                <div class="sort-options">
-                    <button class="sort-button" data-sort="price-asc">الأرخص</button>
-                    <button class="sort-button" data-sort="price-desc">الأغلى</button>
-                </div>
-            </div>
-            <div class="content" id="mice"><div class="products"></div></div>
-        </div>
+
     </div>
 
     <script>
-        const catalog = {
-            gpus: [
-                {name: "NVIDIA RTX 3060", image: "https://m.media-amazon.com/images/I/71f1fy72oJL._AC_SL1500_.jpg", link: "https://www.amazon.eg/dp/B08P2DKQ39", price: 9500},
-                {name: "NVIDIA RTX 3070", image: "https://m.media-amazon.com/images/I/71b54GvR54L._AC_SL1500_.jpg", link: "https://www.amazon.eg/dp/B08HRBW6VB", price: 13000},
-                {name: "AMD RX 6600 XT", image: "https://m.media-amazon.com/images/I/71K64Qk9+YL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=rx+6600+xt", price: 7800},
-                {name: "AMD RX 6700 XT", image: "https://m.media-amazon.com/images/I/713jYFom-ZL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=rx+6700+xt", price: 11500},
-                {name: "NVIDIA RTX 4070 Ti Super", image: "https://m.media-amazon.com/images/I/819wJ9xL1PL._AC_SL1500_.jpg", price: 16500},
-                {name: "AMD RX 7900 GRE", image: "https://m.media-amazon.com/images/I/81T34zY7mFL._AC_SL1500_.jpg", price: 17000},
-                {name: "RTX 4080 Super 16GB", image: "https://m.media-amazon.com/images/I/81B69-joAaL._AC_SL1500_.jpg", price: 21500},
-                {name: "RX 7900 XTX 24GB", image: "https://m.media-amazon.com/images/I/81oV9myImHL._AC_SL1500_.jpg", price: 22000},
-                {name: "AMD Radeon RX 7900 XTX", image: "https://m.media-amazon.com/images/I/81oV9myImHL._AC_SL1500_.jpg", price: 18500}, // من تجميعة 45000
-                {name: "NVIDIA RTX 4070 Ti SUPER", image: "https://m.media-amazon.com/images/I/819wJ9xL1PL._AC_SL1500_.jpg", price: 18000}, // من تجميعة 45000
-                {name: "NVIDIA GeForce RTX 4080 Super", image: "https://m.media-amazon.com/images/I/81B69-joAaL._AC_SL1500_.jpg", price: 22000}, // من تجميعة 50000
-            ],
-            cpus: [
-                {name: "Intel i5-12400F", image: "https://m.media-amazon.com/images/I/51cwFjB9FjL._AC_SL1200_.jpg", link: "https://www.amazon.eg/s?k=intel+12400f", price: 4300},
-                {name: "Intel i7-12700K", image: "https://m.media-amazon.com/images/I/61w99f81fPL._AC_SL1500_.jpg", link: "https://www.amazon.eg/dp/B09J6YWB46", price: 6200},
-                {name: "AMD Ryzen 5 5600X", image: "https://m.media-amazon.com/images/I/61xG994823L._AC_SL1373_.jpg", link: "https://www.amazon.eg/dp/B08R62ZWGL", price: 5000},
-                {name: "AMD Ryzen 7 5800X", image: "https://m.media-amazon.com/images/I/61i9IfPakrL._AC_SL1373_.jpg", link: "https://www.amazon.eg/s?k=ryzen+7+5800x", price: 7200},
-                {name: "AMD Ryzen 7 7800X3D", image: "https://m.media-amazon.com/images/I/61i9IfPakrL._AC_SL1373_.jpg", price: 11000},
-                {name: "Intel Core i7-14700KF", image: "https://m.media-amazon.com/images/I/61fJt99QJQL._AC_SL1500_.jpg", price: 13000},
-                {name: "AMD Ryzen 9 7900X", image: "https://m.media-amazon.com/images/I/61lBfJp66dL._AC_SL1500_.jpg", price: 13000},
-                {name: "AMD Ryzen 9 7950X", image: "https://m.media-amazon.com/images/I/61B21n11GSL._AC_SL1500_.jpg", price: 15000},
-                {name: "Intel Core i9-14900KF", image: "https://m.media-amazon.com/images/I/61fJt99QJQL._AC_SL1500_.jpg", price: 15000},
-                {name: "AMD Ryzen 9 7900X", image: "https://m.media-amazon.com/images/I/61lBfJp66dL._AC_SL1500_.jpg", price: 13000}, // من تجميعة 45000
-                {name: "Intel Core i7-14700KF", image: "https://m.media-amazon.com/images/I/61fJt99QJQL._AC_SL1500_.jpg", price: 13000}, // من تجميعة 45000
-                {name: "AMD Ryzen 9 7950X", image: "https://m.media-amazon.com/images/I/61B21n11GSL._AC_SL1500_.jpg", price: 15000}, // من تجميعة 50000
-                {name: "Intel Core i9-14900KF", image: "https://m.media-amazon.com/images/I/61fJt99QJQL._AC_SL1500_.jpg", price: 15000}, // من تجميعة 50000
-            ],
-            ram: [
-                {name: "Corsair Vengeance LPX 16GB", image: "https://m.media-amazon.com/images/I/514h7wT45KL._AC_SL1200_.jpg", link: "https://www.amazon.eg/s?k=corsair+vengeance+16gb", price: 1100},
-                {name: "G.Skill Trident Z RGB 16GB", image: "https://m.media-amazon.com/images/I/7164n8uX7jL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=gskill+trident+z+16gb", price: 1300},
-                {name: "Kingston Fury Beast 16GB", image: "https://m.media-amazon.com/images/I/61KCXyMhuWL._AC_SL1500_.jpg", price: 1200},
-                {name: "32GB DDR5 6000MHz CL30", image: "https://m.media-amazon.com/images/I/519F-bJqRzL._AC_SL1000_.jpg", price: 3200},
-                {name: "32GB DDR5 (2x16GB) 6000MHz CL30", image: "https://m.media-amazon.com/images/I/519F-bJqRzL._AC_SL1000_.jpg", price: 3200}, // من تجميعة 42000
-                {name: "32GB DDR5 (2x16GB) 6000MHz CL30", image: "https://m.media-amazon.com/images/I/519F-bJqRzL._AC_SL1000_.jpg", price: 3200}, // من تجميعة 45000
-                {name: "32GB DDR5 (2x16GB) 6000MHz CL30", image: "https://m.media-amazon.com/images/I/519F-bJqRzL._AC_SL1000_.jpg", price: 3200}, // من تجميعة 50000
-            ],
-            storage: [
-                {name: "Samsung 970 EVO Plus 1TB", image: "https://m.media-amazon.com/images/I/714hJ-JQS-L._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=samsung+970+evo+plus", price: 1800},
-                {name: "Kingston A2000 1TB", image: "https://m.media-amazon.com/images/I/61lVn017mL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=kingston+a2000+1tb", price: 1600},
-                {name: "WD Blue 1TB HDD", image: "https://m.media-amazon.com/images/I/71CX1Wy590L._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=wd+blue+1tb", price: 1200},
-                {name: "Crucial MX500 1TB", image: "https://m.media-amazon.com/images/I/719rzjNHlRL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=crucial+mx500+1tb", price: 1700},
-                {name: "1TB M.2 NVMe Gen4 SSD", image: "https://m.media-amazon.com/images/I/61zpxT-470L._AC_SL1000_.jpg", price: 2000},
-                {name: "1TB NVMe Gen4 (Kingston KC3000)", image: "https://m.media-amazon.com/images/I/71h6Knq1-jL._AC_SL1500_.jpg", price: 2200},
-                {name: "1TB NVMe Gen4 (Samsung 980 Pro)", image: "https://m.media-amazon.com/images/I/71b994984DL._AC_SL1500_.jpg", price: 2300},
-                {name: "1TB M.2 NVMe Gen4 SSD", image: "https://m.media-amazon.com/images/I/61zpxT-470L._AC_SL1000_.jpg", price: 2000}, // من تجميعة 42000
-                {name: "1TB NVMe Gen4 (Kingston KC3000)", image: "https://m.media-amazon.com/images/I/71h6Knq1-jL._AC_SL1500_.jpg", price: 2200}, // من تجميعة 45000
-                {name: "1TB NVMe Gen4 SSD (Samsung 980 Pro)", image: "https://m.media-amazon.com/images/I/71b994984DL._AC_SL1500_.jpg", price: 2300}, // من تجميعة 50000
-            ],
-            motherboards: [
-                {name: "MSI B660 Tomahawk", image: "https://m.media-amazon.com/images/I/71ndjT324dL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=msi+b660+tomahawk", price: 2800},
-                {name: "ASUS ROG Strix Z690-A", image: "https://m.media-amazon.com/images/I/81ZKTW9x9ZL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=asus+z690-a", price: 4200},
-                {name: "Gigabyte B550 Aorus Elite", image: "https://m.media-amazon.com/images/I/71h5UN7hSOL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=gigabyte+b550+aorus", price: 2500},
-                {name: "ASRock X570 Phantom", image: "https://m.media-amazon.com/images/I/81yQjXvGgEL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=asrock+x570+phantom", price: 3200},
-                {name: "B650 (MSI B650 Tomahawk WiFi)", image: "https://m.media-amazon.com/images/I/71f1y89G+QL._AC_SL1500_.jpg", price: 4000},
-                {name: "Z790 WiFi (ASUS TUF)", image: "https://m.media-amazon.com/images/I/91n-vRl6FfL._AC_SL1500_.jpg", price: 4500},
-                {name: "B650", image: "https://via.placeholder.com/150/b650_generic/fff?Text=B650", price: 4500},
-                {name: "Z790 WiFi", image: "https://via.placeholder.com/150/z790_wifi_generic/fff?Text=Z790+WiFi", price: 4500},
-                {name: "B650 (مثلاً: MSI B650 Tomahawk WiFi)", image: "https://m.media-amazon.com/images/I/71f1y89G+QL._AC_SL1500_.jpg", price: 4000}, // من تجميعة 42000
-                {name: "B650 أو Z790 WiFi (مثل MSI Tomahawk / ASUS TUF)", image: "https://via.placeholder.com/150/b650_z790_build/fff?Text=B650/Z790", price: 4250}, // متوسط من تجميعة 45000
-                {name: "B650 / Z790 WiFi (مثال: ASUS TUF / MSI Tomahawk)", image: "https://via.placeholder.com/150/b650_z790_ultimate/fff?Text=B650/Z790", price: 4500}, // متوسط من تجميعة 50000
-            ],
-            psus: [
-                {name: "Corsair CV550", image: "https://m.media-amazon.com/images/I/61yG01pecVL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=corsair+cv550", price: 850},
-                {name: "EVGA 600 BR", image: "https://m.media-amazon.com/images/I/71jTZ25WbYL._AC_SL1242_.jpg", link: "https://www.amazon.eg/s?k=evga+600+br", price: 900},
-                {name: "be quiet! System Power 9 600W", image: "https://m.media-amazon.com/images/I/611114eu-KL._AC_SL1000_.jpg", link: "https://www.amazon.eg/s?k=be+quiet+600w", price: 1100},
-                {name: "Cooler Master MWE 650", image: "https://m.media-amazon.com/images/I/7154EuRjrnL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=coolermaster+mwe+650", price: 1000},
-                {name: "850W 80+ Gold", image: "https://m.media-amazon.com/images/I/71fRz69wYIL._AC_SL1500_.jpg", price: 2200},
-                {name: "850W – 1000W 80+ Gold", image: "https://m.media-amazon.com/images/I/71fRz69wYIL._AC_SL1500_.jpg", price: 2500},
-                {name: "1000W 80+ Gold", image: "https://m.media-amazon.com/images/I/71fRz69wYIL._AC_SL1500_.jpg", price: 2800},
-                {name: "850W 80+ Gold من ماركة محترمة", image: "https://m.media-amazon.com/images/I/71fRz69wYIL._AC_SL1500_.jpg", price:2200}, // من تجميعة 42000
-                {name: "850W – 1000W 80+ Gold أو Platinum", image: "https://m.media-amazon.com/images/I/71fRz69wYIL._AC_SL1500_.jpg", price: 2500}, // متوسط من تجميعة 45000
-                {name: "1000W 80+ Gold/Platinum", image: "https://m.media-amazon.com/images/I/71fRz69wYIL._AC_SL1500_.jpg", price: 2800}, // متوسط من تجميعة 50000
-            ],
-            cooling: [
-                {name: "Cooler Master Hyper 212", image: "https://m.media-amazon.com/images/I/71ysKnF9jYL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=hyper+212", price: 650},
-                {name: "Noctua NH-U12S", image: "https://m.media-amazon.com/images/I/71h6QYXK9dL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=noctua+nh-u12s", price: 1300},
-                {name: "Corsair iCUE H100i", image: "https://m.media-amazon.com/images/I/71nCnF9jyCL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=corsair+h100i", price: 2200},
-                {name: "DeepCool Gammaxx 400", image: "https://m.media-amazon.com/images/I/61Wp24o5cAL._AC_SL1000_.jpg", link: "https://www.amazon.eg/s?k=gammaxx+400", price: 550},
-                // هنضيف أي تبريدات لو موجودة بشكل محدد في التجميعات
-            ],
-            keyboards: [
-                {name: "Logitech G213 Prodigy", image: "https://m.media-amazon.com/images/I/61lB3o99qUL._AC_SL1500_.jpg", link: "https://www.amazon.eg/dp/B01M6YUX56", price: 2200},
-                {name: "Razer Huntsman Elite", image: "https://m.media-amazon.com/images/I/715rkVLHc1L._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=razer+huntsman+elite", price: 3600},
-                {name: "Corsair K70 RGB", image: "https://m.media-amazon.com/images/I/718x5f57-OL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=corsair+k70+rgb", price: 2800},
-                {name: "HyperX Alloy FPS Pro", image: "https://m.media-amazon.com/images/I/61i5fFjTFIL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=hyperx+fps+pro", price: 1900},
-                {name: "Gaming Combo محترم (ميكانيكال + RGB)", image: "https://m.media-amazon.com/images/I/61tRgvw9WYL._AC_SL1500_.jpg", price: 600}, // من تجميعة 42000
-                {name: "Gaming Combo محترم RGB (ميكانيكال و DPI عالي)", image: "https://m.media-amazon.com/images/I/61tRgvw9WYL._AC_SL1500_.jpg", price: 600}, // متوسط من تجميعة 45000
-                {name: "Gaming Combo RGB ميكانيكال + DPI عالي", image: "https://m.media-amazon.com/images/I/61tRgvw9WYL._AC_SL1500_.jpg", price: 600}, // متوسط من تجميعة 50000
-            ],
-            mice: [
-                {name: "Logitech G502 Hero", image: "https://m.media-amazon.com/images/I/61YRPow7AVL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=logitech+g502", price: 1200},
-                {name: "Razer DeathAdder V2", image: "https://m.media-amazon.com/images/I/71g9NF-3eJL._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=razer+deathadder+v2", price: 1400},
-                {name: "SteelSeries Rival 3", image: "https://m.media-amazon.com/images/I/61xG-99j29L._AC_SL1500_.jpg", link: "https://www.amazon.eg/s?k=steelseries+rival+3", price: 900},
-                {name: "Corsair M65 RGB", image: "https://m.media-amazon.com/images/I/61VwG999VPL._AC_SL1200_.jpg", link: "https://www.amazon.eg/s?k=corsair+m65", price: 1300},
-                // الكيبورد والماوس غالبا بيكونوا كومبو بنفس السعر
-            ]
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Theme Toggle
+        document.addEventListener('DOMContentLoaded', function() {
             const themeToggle = document.getElementById('theme-toggle');
-            const themeIcon = document.getElementById('theme-icon');
-            themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('dark');
-                themeToggle.classList.add('rotate');
-                setTimeout(() => themeToggle.classList.remove('rotate'), 600);
-                themeIcon.textContent = document.body.classList.contains('dark') ? '🌙' : '☀️';
-            });
+            const body = document.body;
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            const askButton = document.getElementById('ask-button');
+            const productDetailsModal = document.getElementById('product-details-modal');
+            const closeModalBtn = productDetailsModal.querySelector('.close-modal-btn');
+            const modalImage = document.getElementById('modal-image');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDetails = document.getElementById('modal-details');
+            const modalPrice = document.getElementById('modal-price');
+            const modalRating = document.getElementById('modal-rating');
+            const sectionHeaders = document.querySelectorAll('.section-header-container');
+            const applyPriceFilters = document.querySelectorAll('.apply-range-filter');
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-            // Sections Toggle and Sorting and Product Click
-            document.querySelectorAll('.section-header-container').forEach(headerContainer => {
-                const headerArrow = headerContainer.querySelector('.section-header-arrow'); // هنمسك السهم عشان هنحتاجه
-
-                headerContainer.addEventListener('click', (event) => {
-                    // نتأكد إن الضغطة مش على زرار الترتيب
-                    if (!event.target.classList.contains('sort-button')) {
-                        headerArrow.classList.toggle('open');
-                        const content = headerContainer.nextElementSibling;
-                        content.classList.toggle('visible');
-                        if (content.classList.contains('visible')) {
-                            renderProducts(headerContainer.dataset.id);
-                        }
+            let catalog = {
+                graphicsCards: [
+                    {
+                        id: 'nvidia-rtx-4090-24gb',
+                        name: 'NVIDIA GeForce RTX 4090',
+                        memory: '24 جيجابايت GDDR6X',
+                        price: 238500.00,
+                        source: 'Ubuy',
+                        rating: 5.0,
+                        details: 'أقوى كارت شاشة من NVIDIA حتى الآن، مثالي للألعاب بدقة 4K والتصميم ثلاثي الأبعاد.',
+                        brand: 'NVIDIA',
+                        category: 'الفئة العليا',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'asus-rtx-4090-24gb',
+                        name: 'اسوس انفيديا جي فورس RTX 4090',
+                        memory: '24 جيجا بايت DDR6X',
+                        price: 262367.10,
+                        source: 'Microless.com',
+                        rating: 4.5,
+                        brand: 'NVIDIA',
+                        category: 'الفئة العليا',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'nvidia-rtx-4080-16gb',
+                        name: 'NVIDIA GeForce RTX 4080',
+                        memory: '16 جيجابايت GDDR6X',
+                        price: 148983.00,
+                        source: 'Ubuy',
+                        rating: 5.0,
+                        brand: 'NVIDIA',
+                        category: 'الفئة العليا',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'zotac-rtx-4080-super-trinity-oc',
+                        name: 'ZOTAC GAMING GeForce RTX 4080 SUPER Trinity OC',
+                        price: 59280.00,
+                        source: 'PCS - Souq',
+                        rating: 4.8,
+                        details: 'أداء ممتاز مع تصميم تبريد ثلاثي المراوح، مناسب للاستخدام المكثف.',
+                        brand: 'NVIDIA',
+                        category: 'الفئة العليا',
+                        memory: '16GB',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'gigabyte-rtx-4070-ti-super-oc',
+                        name: 'Gigabyte WINDFORCE GeForce RTX 4070 Ti SUPER OC',
+                        memory: '16GB GDDR6X',
+                        price: 46800.00,
+                        source: 'PCS - Souq',
+                        brand: 'NVIDIA',
+                        category: 'الفئة العليا',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'zotac-rtx-4070-12gb',
+                        name: 'بطاقة رسومات الألعاب زوتاك جي فورس RTX 4070',
+                        memory: '12 جيجا',
+                        price: 31666.00,
+                        source: 'PCS - Souq',
+                        rating: 4.9,
+                        brand: 'NVIDIA',
+                        category: 'الفئة العليا',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'msi-rtx-4060-ventus-2x-oc',
+                        name: 'MSI GeForce RTX 4060 Ventus 2X OC',
+                        memory: '8 جيجا',
+                        price: 16980.00,
+                        source: 'Amazon.eg - Seller',
+                        rating: 4.7,
+                        details: 'خيار اقتصادي بأداء جيد للألعاب بدقة 1080p.',
+                        brand: 'NVIDIA',
+                        category: 'الفئة المتوسطة',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'asus-gtx-1660s-a6g',
+                        name: 'Asus Rog Strix GTX 1660S A6G الإصدار المتقدم للألعاب',
+                        memory: '6GB',
+                        price: 11785.56,
+                        source: 'Microless.com',
+                        rating: 4.8,
+                        brand: 'NVIDIA',
+                        category: 'الفئة الاقتصادية',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'nvidia-rtx-4080-super-16gb-new',
+                        name: 'RTX 4080 Super',
+                        memory: '16GB',
+                        price: 56000.00,
+                        notes: 'أداء فائق للألعاب بدقة 4K والتصميم الاحترافي',
+                        brand: 'NVIDIA',
+                        category: 'الفئة العليا',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'nvidia-rtx-4070-ti-super-16gb-new',
+                        name: 'RTX 4070 Ti Super',
+                        memory: '16GB',
+                        price: 48500.00,
+                        notes: 'أداء عالي، مناسب للألعاب بدقة 4K',
+                        brand: 'NVIDIA',
+                        category: 'الفئة العليا',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'nvidia-rtx-4070-super-12gb-new',
+                        name: 'RTX 4070 Super',
+                        memory: '12GB',
+                        price: 36524.50,
+                        notes: 'توازن بين الأداء والسعر، مناسب للألعاب بدقة 1440p و4K',
+                        brand: 'NVIDIA',
+                        category: 'الفئة العليا',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'nvidia-rtx-4060-ti-16gb-new',
+                        name: 'RTX 4060 Ti',
+                        memory: '16GB',
+                        price: 24974.50,
+                        notes: 'أداء ممتاز للألعاب بدقة 1440p',
+                        brand: 'NVIDIA',
+                        category: 'الفئة المتوسطة',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'nvidia-rtx-4060-ti-8gb-new',
+                        name: 'RTX 4060 Ti',
+                        memory: '8GB',
+                        price: 19000.00,
+                        notes: 'أداء جيد للألعاب بدقة 1080p و1440p',
+                        brand: 'NVIDIA',
+                        category: 'الفئة المتوسطة',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'nvidia-rtx-4060-8gb-new',
+                        name: 'RTX 4060',
+                        memory: '8GB',
+                        price: 15749.50,
+                        notes: 'خيار اقتصادي مع أداء مناسب للألعاب بدقة 1080p',
+                        brand: 'NVIDIA',
+                        category: 'الفئة المتوسطة',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'nvidia-rtx-3050-6gb-new',
+                        name: 'RTX 3050',
+                        memory: '6GB',
+                        price: 10287.00,
+                        notes: 'مناسب للألعاب بدقة 1080p مع إعدادات متوسطة',
+                        brand: 'NVIDIA',
+                        category: 'الفئة الاقتصادية',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'nvidia-gtx-1660-super-6gb-new',
+                        name: 'GTX 1660 Super',
+                        memory: '6GB',
+                        price: 8800.00,
+                        notes: 'أداء جيد للألعاب بدقة 1080p',
+                        brand: 'NVIDIA',
+                        category: 'الفئة الاقتصادية',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'nvidia-gt-730-4gb',
+                        name: 'GT 730',
+                        memory: '4GB DDR3',
+                        price: 3050.00,
+                        notes: 'مناسب للاستخدامات الأساسية ومشاهدة الفيديو',
+                        brand: 'NVIDIA',
+                        category: 'الفئة الاقتصادية',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'amd-rx-7900-xtx-24gb',
+                        name: 'RX 7900 XTX',
+                        memory: '24GB',
+                        price: 39900.00,
+                        notes: 'أداء فائق، منافس لـ RTX 4090',
+                        brand: 'AMD',
+                        category: 'الفئة العليا',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'amd-rx-7900-xt-20gb',
+                        name: 'RX 7900 XT',
+                        memory: '20GB',
+                        price: 36500.00,
+                        notes: 'أداء عالي، مناسب للألعاب بدقة 4K',
+                        brand: 'AMD',
+                        category:'الفئة العليا',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'amd-rx-7700-xt-12gb',
+                        name: 'RX 7700 XT',
+                        memory: '12GB',
+                        price: 22725.00,
+                        notes: 'أداء ممتاز للألعاب بدقة 1440p',
+                        brand: 'AMD',
+                        category: 'الفئة المتوسطة',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'amd-rx-7600-8gb',
+                        name: 'RX 7600',
+                        memory: '8GB',
+                        price: 13500.00,
+                        notes: 'خيار جيد للألعاب بدقة 1080p و1440p',
+                        brand: 'AMD',
+                        category: 'الفئة المتوسطة',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'amd-rx-6750-xt-12gb',
+                        name: 'RX 6750 XT',
+                        memory: '12GB',
+                        price: 18500.00,
+                        notes: 'توازن بين الأداء والسعر',
+                        brand: 'AMD',
+                        category: 'الفئة المتوسطة',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'amd-rx-6500-xt-4gb',
+                        name: 'RX 6500 XT',
+                        memory: '4GB',
+                        price: 8450.00,
+                        notes: 'خيار اقتصادي للألعاب الخفيفة',
+                        brand: 'AMD',
+                        category: 'الفئة الاقتصادية',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'amd-rx-580-8gb',
+                        name: 'RX 580',
+                        memory: '8GB',
+                        price: 11200.00,
+                        notes: 'أداء جيد للألعاب بدقة 1080p',
+                        brand: 'AMD',
+                        category: 'الفئة الاقتصادية',
+                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
                     }
-                });
+                ],
+                processors: [
+                    {
+                        id: 'intel-i3-13100',
+                        name: 'Intel Core i3-13100',
+                        coresThreads: '4 أنوية / 8 خيوط',
+                        baseMaxClock: '3.3 – 4.5 جيجاهرتز',
+                        notes: 'مناسبة للمهام اليومية والمكتبية',
+                        brand: 'Intel',
+                        price: 3000,
+                        rating: 4.0,
+                        image: 'https://m.media-amazon.com/images/I/51T93-uWj4L._AC_SL1000_.jpg',
+                        details: 'تفاصيل معالج Intel Core i3-13100...'
+                    },
+                    {
+                        id: 'intel-i5-14600k',
+                        name: 'Intel Core i5-14600K',
+                        coresThreads: '6-14 نواة / 12-20 خيط',
+                        baseMaxClock: '2.5 – 5.3 جيجاهرتز',
+                        notes: 'توازن بين الأداء والسعر',
+                        brand: 'Intel',
+                        price: 7000,
+                        rating: 4.5,
+                        image: 'https://m.media-amazon.com/images/I/51T93-uWj4L._AC_SL1000_.jpg',
+                        details: 'تفاصيل معالج Intel Core i5-14600K...'
+                    },
+                    {
+                        id: 'amd-ryzen3-5300g',
+                        name: 'AMD Ryzen 3 5300G',
+                        coresThreads: '4 أنوية / 8 خيوط',
+                        baseMaxClock: '3.8 – 4.2 جيجاهرتز',
+                        notes: 'مناسبة للمهام اليومية والمكتبية',
+                        brand: 'AMD',
+                        price: 2500,
+                        rating: 3.8,
+                        image: 'https://m.media-amazon.com/images/I/51T93-uWj4L._AC_SL1000_.jpg',
+                        details: 'تفاصيل معالج AMD Ryzen 3 5300G...'
+                    }
+                ],
+                memory: [
+                    {
+                        id: 'ram-ddr4-4gb-2400',
+                        name: 'Crucial 4GB DDR4 2400MHz',
+                        capacity: '4 جيجابايت',
+                        speed: '2400 MHz',
+                        brand: 'Crucial',
+                        price: 434.5, // متوسط السعر
+                        notes: 'الاستخدامات الأساسية',
+                        type: 'DDR4',
+                        rating: 3.9,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr4-8gb-2666-kingston',
+                        name: 'Kingston 8GB DDR4 2666MHz',
+                        capacity: '8 جيجابايت',
+                        speed: '2666 MHz',
+                        brand: 'Kingston',
+                        price: 669.5, // متوسط السعر
+                        notes: 'الاستخدامات المتوسطة',
+                        type: 'DDR4',
+                        rating: 4.2,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr4-8gb-3000-corsair',
+                        name: 'Corsair Vengeance LPX 8GB DDR4 3000MHz',
+                        capacity: '8 جيجابايت',
+                        speed: '3000 MHz',
+                        brand: 'Corsair',
+                        price: 937,
+                        notes: 'الألعاب الخفيفة',
+                        type: 'DDR4',
+                        rating: 4.0,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr4-8gb-3200-kingstonfury',
+                        name: 'Kingston Fury Beast 8GB DDR4 3200MHz',
+                        capacity: '8 جيجابايت',
+                        speed: '3200 MHz',
+                        brand: 'Kingston',
+                        price: 1024,
+                        notes: 'الألعاب وتعدد المهام',
+                        type: 'DDR4',
+                        rating: 4.5,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr4-8gb-3600-corsairhyperx',
+                        name: 'Corsair / HyperX 8GB DDR4 3600MHz',
+                        capacity: '8 جيجابايت',
+                        speed: '3600 MHz',
+                        brand: 'Corsair / HyperX',
+                        price: 2150,
+                        notes: 'الأداء العالي',
+                        type: 'DDR4',
+                        rating: 4.8,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr4-16gb-2666-crucial',
+                        name: 'Crucial 16GB DDR4 2666MHz',
+                        capacity: '16 جيجابايت',
+                        speed: '2666 MHz',
+                        brand: 'Crucial',
+                        price: 1099,
+                        notes: 'الاستخدامات المتقدمة',
+                        type: 'DDR4',
+                        rating: 4.3,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr4-16gb-3200-corsaircrucial',
+                        name: 'Corsair / Crucial 16GB DDR4 3200MHz',
+                        capacity: '16 جيجابايت',
+                        speed: '3200 MHz',
+                        brand: 'Corsair / Crucial',
+                        price: 1949,
+                        notes: 'الألعاب الثقيلة والتصميم',
+                        type: 'DDR4',
+                        rating: 4.7,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr4-16gb-3600-corsairoris',
+                        name: 'Corsair / Oris 16GB DDR4 3600MHz',
+                        capacity: '16 جيجابايت',
+                        speed: '3600 MHz',
+                        brand: 'Corsair / Oris',
+                        price: 2749,
+                        notes: 'الأداء الاحترافي',
+                        type: 'DDR4',
+                        rating: 4.9,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr4-32gb-3200-crucialcorsair',
+                        name: 'Crucial / Corsair 32GB DDR4 3200MHz',
+                        capacity: '32 جيجابايت',
+                        speed: '3200 MHz',
+                        brand: 'Crucial / Corsair',
+                        price: 3444.5,
+                        notes: 'التصميم والمونتاج',
+                        type: 'DDR4',
+                        rating: 4.6,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr4-32gb-3600-hyperxcorsair',
+                        name: 'HyperX / Corsair 32GB DDR4 3600MHz',
+                        capacity: '32 جيجابايت',
+                        speed: '3600 MHz',
+                        brand: 'HyperX / Corsair',
+                        price: 3444.5,
+                        notes: 'المهام الثقيلة',
+                        type: 'DDR4',
+                        rating: 4.8,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr3-2gb-1333-kingston',
+                        name: 'Kingston 2GB DDR3 1333MHz',
+                        capacity: '2 جيجابايت',
+                        speed: '1333 MHz',
+                        brand: 'Kingston',
+                        price: 234.5,
+                        notes: 'الاستخدامات الأساسية',
+                        type: 'DDR3',
+                        rating: 3.5,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr3-4gb-1600-kingstonhynixpatriot',
+                        name: 'Kingston / Hynix / Patriot 4GB DDR3 1600MHz',
+                        capacity: '4 جيجابايت',
+                        speed: '1600 MHz',
+                        brand: 'Kingston / Hynix / Patriot',
+                        price: 332.5,
+                        notes: 'الاستخدامات المتوسطة',
+                        type: 'DDR3',
+                        rating: 3.8,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr3-8gb-1600-kingstoncrucial',
+                        name: 'Kingston / Crucial 8GB DDR3 1600MHz',
+                        capacity: '8 جيجابايت',
+                        speed: '1600 MHz',
+                        brand: 'Kingston / Crucial',
+                        price: 905,
+                        notes: 'الاستخدامات المتقدمة',
+                        type: 'DDR3',
+                        rating: 4.1,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr5-16gb-4800-crucial',
+                        name: 'Crucial 16GB DDR5 4800MHz',
+                        capacity: '16 جيجابايت',
+                        speed: '4800 MHz',
+                        brand: 'Crucial',
+                        price: 2634,
+                        notes: 'الألعاب الحديثة والتصميم',
+                        type: 'DDR5',
+                        rating: 4.5,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    },
+                    {
+                        id: 'ram-ddr5-32gb-6000-teamgroup',
+                        name: 'TeamGroup T-Force Delta RGB 32GB DDR5 6000MHz',
+                        capacity: '32 جيجابايت',
+                        speed: '6000 MHz',
+                        brand: 'TeamGroup',
+                        price: 3019,
+                        notes: 'الأداء الاحترافي',
+                        type: 'DDR5',
+                        rating: 4.7,
+                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
+                    }
+                ],
+                storage: [
+                    { id: 'ssd-1', name: 'Samsung 500GB SSD', price: 900, rating: 4.5, image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg' },
+                    { id: 'hdd-1', name: 'Seagate 1TB HDD', price: 500, rating: 3.9, image: 'https://m.media-amazon.com/images/I/71CjW9wE1jL._AC_SL1500_.jpg' }
+                ],
+                headphones: [
+                    {
+                        id: 'headphones-gamma-gt304',
+                        name: 'Gamma GT-304 2.0',
+                        price: 199,
+                        features: 'تصميم خشبي، صوت ستيريو، مناسبة للمكاتب',
+                        source: 'كيمو ستور',
+                        rating: 3.5,
+                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'headphones-kisonli-l1040',
+                        name: 'Kisonli L-1040 RGB 2.0',
+                        price: 195,
+                        features: 'إضاءة RGB، صوت نقي، تصميم مدمج',
+                        source: 'كيمو ستور',
+                        rating: 4.1,
+                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'headphones-hp-dhs2111',
+                        name: 'HP DHS-2111 2.0',
+                        price: 525,
+                        features: 'صوت عالي الجودة، تصميم أنيق، مناسبة للمنزل والمكتب',
+                        source: 'كيمو ستور',
+                        rating: 4.3,
+                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'headphones-jbl-partybox1000',
+                        name: 'JBL Partybox 1000',
+                        price: 7999,
+                        features: 'إضاءة LED، صوت قوي، ميكروفون وجيتار مدخل',
+                        source: 'كيمو ستور',
+                        rating: 4.8,
+                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'headphones-anker-soundcore-rave-neo',
+                        name: 'Anker Soundcore Rave Neo',
+                        price: 5399,
+                        features: 'إضاءة LED، صوت جهير قوي، بطارية تدوم حتى 18 ساعة',
+                        source: 'دريم 2000',
+                        rating: 4.6,
+                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
+                    }
+                ],
+                keyboards: [
+                    {
+                        id: 'keyboard-redragon-k624-pro',
+                        name: 'Redragon K624 Pro – لاسلكي 60% RGB',
+                        description: 'لوحة مفاتيح ميكانيكية بإضاءة خلفية LED و63 مفتاحًا، تدعم الاتصال عبر 2.4G وBluetooth وكابل Type-C.',
+                        price: 3199,
+                        source: 'Games2Egypt، Noon',
+                        rating: 4.5,
+                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'keyboard-redragon-k614-anivia',
+                        name: 'Redragon K614 Anivia – سلكية 60%',
+                        description: 'لوحة مفاتيح ميكانيكية سلكية رفيعة للغاية بنسبة 60%، مزودة بمفاتيح حمراء صامتة وإضاءة RGB.',
+                        price: 1749,
+                        source: 'Games2Egypt، Noon',
+                        rating: 4.2,
+                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'keyboard-meetion-mk500',
+                        name: 'Meetion MK500 – مفاتيح زرقاء عربية',
+                        description: 'لوحة مفاتيح ميكانيكية سلكية بمفاتيح OUTEMU الزرقاء، مزودة بإضاءة خلفية LED ومساند للذراعين قابلة للإزالة.',
+                        price: 1599,
+                        source: 'Compumarts، Noon',
+                        rating: 4.0,
+                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
+                    }
+                ],
+                mice: [
+                    {
+                        id: 'mouse-redragon-m612',
+                        name: 'Redragon M612 Predator RGB',
+                        price: 949,
+                        features: 'دقة 8000 نقطة في البوصة، 9 أزرار قابلة للبرمجة، إضاءة RGB',
+                        source: 'جوميا',
+                        rating: 4.3,
+                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
+                    },
+                    {
+                        id: 'mouse-redragon-m715',
+                        name: 'Redragon M715 DAGGER',
+                        price: 949,
+                        features: 'دقة 10000 نقطة في البوصة، تصميم مريح، أزرار قابلة للبرمجة',
+                        source: 'جوميا',
+                        rating: 4.1,
+                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
+                    }
+                ]
+            };
 
-                const sortButtons = headerContainer.querySelectorAll('.sort-button');
-                sortButtons.forEach(button => {
-                    button.addEventListener('click', () => {
-                        const sectionId = headerContainer.dataset.id;
-                        const sortBy = button.dataset.sort;
-                        renderProducts(sectionId, sortBy);
-                    });
-                });
-            });
+            function toggleTheme() {
+                body.classList.toggle('light-mode');
+                themeToggle.classList.toggle('light-mode');
+                themeToggle.classList.add('rotated');
+                setTimeout(() => {
+                    themeToggle.classList.remove('rotated');
+                }, 500);
+            }
 
-            function renderProducts(sectionId, sortBy) {
-                const productsContainer = document.querySelector(`#${sectionId} .products`);
-                if (!catalog[sectionId]) {
-                    productsContainer.innerHTML = '<p>لا يوجد منتجات في هذا القسم حاليًا.</p>';
-                    return;
-                }
+            function renderProducts(category, productList) {
+                const productsContainer = document.getElementById(category + '-products').querySelector('.products');
+                productsContainer.innerHTML = '';
+                productList.forEach(product => {
+                    const productDiv = document.createElement('div');
+                    productDiv.classList.add('product');
+                    productDiv.dataset.productId = product.id;
+                    productDiv.dataset.productCategory = category;
 
-                let products = [...catalog[sectionId]];
+                    const img = document.createElement('img');
+                    img.src = product.image || 'https://via.placeholder.com/150'; // صورة افتراضية
+                    img.alt = product.name;
 
-                if (sortBy === 'price-asc') {
-                    products.sort((a, b) => (a.price || Infinity) - (b.price || Infinity));
-                } else if (sortBy === 'price-desc') {
-                    products.sort((a, b) => (b.price || -Infinity) - (a.price || -Infinity));
-                }
+                    const h3 = document.createElement('h3');
+                    h3.textContent = product.name;
 
-                let html = products.map(product => `
-                    <div class="product" data-product-name="${product.name}">
-                        <img src="${product.image || 'https://via.placeholder.com/150'}" alt="${product.name}">
-                        <div class="details">
-                            <h3>${product.name}</h3>
-                            <p>${product.price ? `السعر: ${product.price} جنيه` : 'السعر غير متوفر'}</p>
-                            ${/* هنمسح أو نعلق على السطر ده عشان نشيل زرار "عرض المزيد" */ ''}
-                        </div>
-                    </div>
-                `).join('');
+                    const price = document.createElement('p');
+                    price.classList.add('price');
+                    price.textContent = `${product.price.toFixed(2)} جنيه`;
 
-                productsContainer.innerHTML = html;
+                    const rating = document.createElement('p');
+                    rating.classList.add('rating');
+                    rating.textContent = '⭐'.repeat(Math.round(product.rating || 0));
 
-                // إضافة إيفنت ليسنر لكل منتج بعد عرضه
-                productsContainer.querySelectorAll('.product').forEach(productElement => {
-                    productElement.addEventListener('click', () => {
-                        const productName = productElement.dataset.productName;
-                        alert(`اسم المنتج: ${productName}`);
-                        // هنا ممكن نضيف كود عشان نعرض تفاصيل أكتر في مكان تاني في الصفحة
-                    });
+                    const detailsButton = document.createElement('button');
+                    detailsButton.classList.add('details-btn');
+                    detailsButton.textContent = 'عرض التفاصيل';
+                    detailsButton.addEventListener('click', () => showProductDetails(product));
+
+                    const favoriteButton = document.createElement('button');
+                    favoriteButton.classList.add('favorite-btn');
+                    favoriteButton.textContent = favorites.includes(product.id) ? 'إزالة من المفضلة' : 'أضف للمفضلة';
+                    favoriteButton.addEventListener('click', () => toggleFavorite(product.id, favoriteButton));
+
+                    productDiv.appendChild(img);
+                    productDiv.appendChild(h3);
+                    productDiv.appendChild(price);
+                    productDiv.appendChild(rating);
+                    productDiv.appendChild(detailsButton);
+                    productDiv.appendChild(favoriteButton);
+
+                    productsContainer.appendChild(productDiv);
                 });
             }
 
-            // QA with flexible search for price and specs
-            const qaBtn = document.getElementById('qa-btn');
-            const qaInput = document.getElementById('qa-input');
-            const qaAnswer = document.getElementById('qa-answer');
-            qaBtn.addEventListener('click', handleQuestion);
-            qaInput.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    handleQuestion();
-                }
-            });
+            function showProductDetails(product) {
+                modalImage.src = product.image || 'https://via.placeholder.com/300';
+                modalImage.alt = product.name;
+                modalTitle.textContent = product.name;
+                modalDetails.textContent = product.details || 'لا توجد تفاصيل متاحة لهذا المنتج.';
+                modalPrice.textContent = `${product.price.toFixed(2)} جنيه`;
+                modalRating.textContent = '⭐'.repeat(Math.round(product.rating || 0));
+                productDetailsModal.style.display = 'block';
+            }
 
-            function handleQuestion() {
-                const q = qaInput.value.trim().toLowerCase();
-                qaInput.value = '';
-                qaAnswer.textContent = 'جاري البحث عن إجابة لسؤالك...';
+            function closeProductDetailsModal() {
+                productDetailsModal.style.display = 'none';
+            }
 
-                if (q) {
-                    let found = false;
-                    const askForPrice = q.includes('سعر') || q.includes('كام');
-                    const askForSpecs = q.includes('مواصفات');
-
-                    for (const section in catalog) {
-                        for (const product of catalog[section]) {
-                            const productNameLower = product.name.toLowerCase();
-                            if (productNameLower.includes(q)) { // هنستخدم includes عشان يدور في الاسم بالكامل
-                                let answer = `اسم المنتج: ${product.name}`;
-                                if (askForPrice) {
-                                    answer += product.price ? `, السعر التقريبي: ${product.price} جنيه` : ', السعر غير متوفر حاليًا';
-                                } else if (askForSpecs) {
-                                    answer += product.price ? `, السعر التقريبي: ${product.price} جنيه (بيانات مبسطة)` : ' (بيانات مبسطة)';
-                                    // هنا ممكن نضيف معلومات أكتر عن المواصفات لو متوفرة في بيانات الكتالوج
-                                } else {
-                                    qaAnswer.textContent = answer;
-                                    found = true;
-                                    return;
-                                }
-                                qaAnswer.textContent = answer;
-                                found = true;
-                                return;
-                            }
-                        }
-                    }
-
-                    if (!found) {
-                        if (
-                            q.includes('كمبيوتر') ||
-                            q.includes('تجميعة')
-                        ) {
-                            qaAnswer.textContent = 'يمكنك استعراض المواصفات والأسعار في الأقسام أو زيارة صفحة التجميعات الذكية.';
-                        } else {
-                            qaAnswer.textContent = 'لم يتم العثور على إجابة محددة لسؤالك.';
-                        }
-                    }
+            function toggleFavorite(productId, button) {
+                const index = favorites.indexOf(productId);
+                if (index > -1) {
+                    favorites.splice(index, 1);
+                    button.textContent = 'أضف للمفضلة';
+                    button.classList.remove('active');
                 } else {
-                    qaAnswer.textContent = 'من فضلك اكتب سؤالك.';
+                    favorites.push(productId);
+                    button.textContent = 'إزالة من المفضلة';
+                    button.classList.add('active');
+                }
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+            }
+
+            function searchProducts() {
+                const searchTerm = searchInput.value.toLowerCase();
+                for (const category in catalog) {
+                    const filteredProducts = catalog[category].filter(product =>
+                        product.name.toLowerCase().includes(searchTerm)
+                    );
+                    renderProducts(category, filteredProducts);
                 }
             }
 
-            function updateSendButtonText() {
-                const qaBtn = document.getElementById('qa-btn');
-                if (window.innerWidth <= 600) { // لو عرض الشاشة أقل من أو يساوي 600 بكسل (تقريبي للموبايل)
-                    qaBtn.textContent = 'إرسال';
-                } else {
-                    qaBtn.textContent = 'اسأل';
-                }
+            function applyRangeFilter(category) {
+                const minPriceInput = document.getElementById(`min-price-${category}`);
+                const maxPriceInput = document.getElementById(`max-price-${category}`);
+                const minPrice = parseFloat(minPriceInput.value) || 0;
+                const maxPrice = parseFloat(maxPriceInput.value) || Infinity;
+
+                const filteredProducts = catalog[category].filter(product =>
+                    product.price >= minPrice && product.price <= maxPrice
+                );
+                renderProducts(category, filteredProducts);
             }
 
-            // ننفذ الوظيفة عند تحميل الصفحة
-            updateSendButtonText();
+            // Initial rendering
+            for (const category in catalog) {
+                renderProducts(category, catalog[category]);
+            }
 
-            // وننفذها تاني عند تغيير حجم الشاشة (في حالة تدوير الموبايل أو تغيير حجم نافذة المتصفح)
-            window.addEventListener('resize', updateSendButtonText);
+            // Event listeners
+            themeToggle.addEventListener('click', toggleTheme);
+            searchButton.addEventListener('click', searchProducts);
+            searchInput.addEventListener('input', searchProducts);
+            closeModalBtn.addEventListener('click', closeProductDetailsModal);
+
+            sectionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const arrow = this.querySelector('.section-header-arrow');
+                    content.classList.toggle('visible');
+                    arrow.classList.toggle('open');
+                });
+            });
+
+            applyPriceFilters.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    applyRangeFilter(category);
+                });
+            });
+
+            // حفظ حالة الأقسام المفتوحة في Local Storage (مثال بسيط)
+            const openSections = JSON.parse(localStorage.getItem('openSections')) || {'graphicsCards-section': true};
+            sectionHeaders.forEach(header => {
+                const content = header.nextElementSibling;
+                const arrow = header.querySelector('.section-header-arrow');
+                const sectionId = header.parentNode.id;
+                if (openSections[sectionId]) {
+                    content.classList.add('visible');
+                    arrow.classList.add('open');
+                }
+                header.addEventListener('click', () => {
+                    openSections[sectionId] = content.classList.contains('visible');
+                    localStorage.setItem('openSections', JSON.stringify(openSections));
+                });
+            });
         });
     </script>
 </body>
