@@ -1,1260 +1,1122 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر الأجهزة الإلكترونية</title>
+    <title>متجر الألعاب | متجر الكترونيات ومكونات الكمبيوتر</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* --- نفس الـ CSS السابق مع تعديلات طفيفة لتناسب العناصر الجديدة --- */
+        /* Custom CSS for dark mode and other styles */
+        :root {
+            --primary-bg-light: #f3f4f6; /* gray-100 */
+            --secondary-bg-light: #ffffff;
+            --text-light: #1f2937; /* gray-900 */
+            --header-bg-light: #3b82f6; /* blue-500 */
+            --header-text-light: #ffffff;
+            --accent-color-light: #ef4444; /* red-500 */
+            --border-light: #e5e7eb; /* gray-200 */
+            --card-bg-light: #ffffff;
+            --button-bg-light: #3b82f6;
+            --button-text-light: #ffffff;
+        }
+
+        html.dark {
+            --primary-bg-dark: #1a202c; /* custom dark gray */
+            --secondary-bg-dark: #2d3748; /* custom darker gray */
+            --text-dark: #e2e8f0; /* gray-200 */
+            --header-bg-dark: #1f2937; /* gray-800 */
+            --header-text-dark: #ffffff;
+            --accent-color-dark: #f87171; /* red-400 */
+            --border-dark: #4a5568; /* gray-700 */
+            --card-bg-dark: #2d3748;
+            --button-bg-dark: #4f46e5; /* indigo-600 */
+            --button-text-dark: #ffffff;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #222;
-            color: #eee;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-bg-light);
+            color: var(--text-light);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            direction: rtl; /* Right-to-left for Arabic */
+        }
+
+        html.dark body {
+            background-color: var(--primary-bg-dark);
+            color: var(--text-dark);
+        }
+
+        header {
+            background-color: var(--header-bg-light);
+            color: var(--header-text-light);
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-        body.light-mode {
-            background-color: #f4f4f4;
-            color: #333;
+
+        html.dark header {
+            background-color: var(--header-bg-dark);
+            color: var(--header-text-dark);
         }
+
         .container {
-            width: 90%;
-            margin: 20px auto;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
         }
-        header {
+
+        .product-card {
+            background-color: var(--card-bg-light);
+            border: 1px solid var(--border-light);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        html.dark .product-card {
+            background-color: var(--card-bg-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        html.dark .product-card:hover {
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        html.dark .product-title {
+            color: var(--text-dark);
+        }
+
+        .product-details {
+            font-size: 0.9rem;
+            color: #4b5563; /* gray-700 */
+            margin-bottom: 1rem;
+            flex-grow: 1; /* Allow details to take up space */
+        }
+
+        html.dark .product-details {
+            color: #9ca3af; /* gray-400 */
+        }
+
+        .product-price {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--accent-color-light);
+            margin-bottom: 1rem;
+        }
+
+        html.dark .product-price {
+            color: var(--accent-color-dark);
+        }
+
+        .rating {
+            color: #f59e0b; /* amber-500 */
+            margin-bottom: 1rem;
+        }
+
+        .details-button {
+            background-color: var(--button-bg-light);
+            color: var(--button-text-light);
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+        }
+
+        .details-button:hover {
+            background-color: #2563eb; /* blue-700 */
+        }
+
+        html.dark .details-button {
+            background-color: var(--button-bg-dark);
+            color: var(--button-text-dark);
+        }
+
+        html.dark .details-button:hover {
+            background-color: #3b82f6; /* indigo-500 */
+        }
+
+        /* Collapsible sections */
+        .collapsible-header {
+            background-color: var(--secondary-bg-light);
+            color: var(--text-light);
+            padding: 1rem;
+            cursor: pointer;
+            border: 1px solid var(--border-light);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            margin-bottom: 20px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
-        header h1 {
-            margin: 0;
+
+        html.dark .collapsible-header {
+            background-color: var(--secondary-bg-dark);
+            color: var(--text-dark);
+            border-color: var(--border-dark);
         }
-        nav a {
-            color: #eee;
-            text-decoration: none;
-            margin-left: 15px;
-            transition: color 0.3s ease;
+
+        .collapsible-header:hover {
+            background-color: #e5e7eb; /* gray-200 */
         }
-        nav a:hover {
-            color: #bbb;
+
+        html.dark .collapsible-header:hover {
+            background-color: #4a5568; /* gray-700 */
         }
-        body.light-mode nav a {
-            color: #333;
-        }
-        body.light-mode nav a:hover {
-            color: #555;
-        }
-        #theme-toggle {
-            background: none;
-            border: none;
-            color: #eee;
-            font-size: 1.5em;
-            cursor: pointer;
-            outline: none;
-            transition: transform 0.5s ease, color 0.3s ease;
-        }
-        #theme-toggle.light-mode {
-            color: #333;
-        }
-        #theme-toggle.rotated {
-            transform: rotate(360deg);
-        }
-        .search-container {
-            display: flex;
-            margin-bottom: 10px;
-        }
-        #search-input {
-            padding: 10px;
-            border: 1px solid #555;
-            background-color: #333;
-            color: #eee;
-            border-radius: 5px 0 0 5px;
-            flex-grow: 1;
-        }
-        body.light-mode #search-input {
-            background-color: #fff;
-            color: #333;
-            border-color: #ccc;
-        }
-        #search-button {
-            padding: 10px 15px;
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        #search-button:hover {
-            background-color: #4cae4c;
-        }
-        #ask-button {
-            display: block;
-            width: 100%;
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-bottom: 10px;
-        }
-        #ask-button:hover {
-            background-color: #0056b3;
-        }
-        .section {
-            margin-bottom: 20px;
-            border: 1px solid #555;
-            border-radius: 5px;
+
+        .collapsible-content {
+            max-height: 0;
             overflow: hidden;
-            background-color: #333;
+            transition: max-height 0.5s ease-out;
+            padding: 0 1rem;
+            margin-bottom: 1rem;
+            background-color: var(--card-bg-light); /* Added to match card background */
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Lighter shadow */
         }
-        body.light-mode .section {
-            background-color: #fff;
-            border-color: #ccc;
+
+        html.dark .collapsible-content {
+            background-color: var(--card-bg-dark);
         }
-        .section-header-container {
-            padding: 15px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #444;
-            color: #eee;
-            transition: background-color 0.3s ease;
+
+        .collapsible-content.show {
+            max-height: 2000px; /* Large enough to show all content */
+            padding-bottom: 1rem;
+            padding-top: 1rem; /* Added padding to top when shown */
+            border: 1px solid var(--border-light); /* Add border when shown */
+            margin-top: -1rem; /* Adjust margin to overlap with header border */
+            border-top-left-radius: 0; /* Remove top border radius to connect to header */
+            border-top-right-radius: 0;
+            z-index: 1; /* Ensure content is above other elements if needed */
         }
-        body.light-mode .section-header-container {
-            background-color: #ddd;
-            color: #333;
+
+        html.dark .collapsible-content.show {
+            border-color: var(--border-dark);
         }
-        .section-header-container:hover {
-            background-color: #555;
-        }
-        body.light-mode .section-header-container:hover {
-            background-color: #ccc;
-        }
-        .section-header {
-            font-weight: bold;
-        }
-        .section-header-arrow {
-            font-size: 1.2em;
+
+        .collapsible-header i {
             transition: transform 0.3s ease;
         }
-        .section-header-arrow.open {
-            transform: rotate(90deg);
+
+        /* Adjust icon rotation for the correct sibling */
+        /* These classes are for the icon's initial state and toggle */
+        .collapsible-header .fa-chevron-down {
+            transform: rotate(0deg); /* Default down position */
         }
-        .section-content {
-            padding: 15px;
-            display: none;
+        .collapsible-header .fa-chevron-up {
+            transform: rotate(180deg); /* When section is open */
         }
-        .section-content.visible {
-            display: block;
+
+        /* Dark mode toggle spin effect */
+        #mode-toggle.spin i {
+            animation: spin 0.3s linear;
         }
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        .product {
-            border: 1px solid #555;
-            border-radius: 5px;
-            padding: 15px;
-            text-align: center;
-            background-color: #444;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer; /* لجعل المنتج قابل للنقر لعرض التفاصيل */
-        }
-        body.light-mode .product {
-            background-color: #eee;
-            border-color: #bbb;
-        }
-        .product:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        body.light-mode .product:hover {
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        .product img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-        .product h3 {
-            margin-top: 0;
-            margin-bottom: 5px;
-            font-size: 1.1em;
-        }
-        .product .price {
-            color: #5cb85c;
-            margin-bottom: 5px;
-        }
-        .product .rating {
-            color: gold;
-            margin-bottom: 10px;
-        }
-        .product button {
-            padding: 8px 12px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
-        }
-        .product .details-btn {
-            background-color: #007bff;
-            color: white;
-        }
-        .product .details-btn:hover {
-            background-color: #0056b3;
-        }
-        .product .favorite-btn {
-            background-color: #f0ad4e;
-            color: white;
-        }
-        .product .favorite-btn.active {
-            background-color: #d9534f;
-        }
-        .product .favorite-btn:hover {
-            background-color: #eea236;
-        }
-        .sort-filter-controls {
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .filter-select {
-            padding: 8px 15px;
-            border: 1px solid #555;
-            border-radius: 5px;
-            background-color: #444;
-            color: #eee;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        body.light-mode .filter-select {
-            border-color: #ccc;
-            background-color: #eee;
-            color: #333;
-        }
-        .filter-select:hover {
-            background-color: #555;
-            color: #eee;
-        }
-        body.light-mode .filter-select:hover {
-            background-color: #ddd;
-            color: #333;
-        }
-        .range-filter-container {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 10px;
-        }
-        .range-filter-container input[type="number"] {
-            padding: 8px;
-            border: 1px solid #555;
-            border-radius: 5px;
-            background-color: #333;
-            color: #eee;
-            width: 80px;
-        }
-        body.light-mode .range-filter-container input[type="number"] {
-            border-color: #ccc;
-            background-color: #fff;
-            color: #333;
-        }
-        .range-filter-container button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .range-filter-container button:hover {
-            background-color: #0056b3;
-        }
-        /* --- Modal لعرض تفاصيل المنتج --- */
-        #product-details-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        .modal-content {
-            background-color: #333;
-            color: #eee;
-            border-radius: 5px;
-            padding: 20px;
-            margin: 50px auto;
-            width: 80%;
-            max-width: 600px;
-            position: relative;
-        }
-        body.light-mode .modal-content {
-            background-color: #fff;
-            color: #333;
-        }
-        .close-modal-btn {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 1.5em;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: #eee;
-        }
-        body.light-mode .close-modal-btn {
-            color: #333;
-        }
-        .product-full-details img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 15px;
-        }
-        .product-full-details h2 {
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-        .product-full-details p {
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-        .product-full-details .price {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .product-full-details .rating {
-            font-size: 1.1em;
-            margin-bottom: 15px;
+
+        /* Responsive adjustments */
+        @media (min-width: 640px) {
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
         }
     </style>
 </head>
-<body class="dark-mode">
-    <div class="container">
-        <header>
-            <h1>متجر الأجهزة الإلكترونية</h1>
+<body>
+    <header class="py-4 shadow-md">
+        <div class="container flex justify-between items-center">
+            <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                <button id="mode-toggle" class="text-white focus:outline-none transition-transform duration-300 ease-in-out">
+                    <i class="fas fa-sun text-2xl"></i>
+                </button>
+                <span class="text-2xl font-bold">متجر الألعاب</span>
+            </div>
             <nav>
-                <button id="theme-toggle">🌙</button>
-                <a href="favorites.html" id="favorites-link">المفضلة</a>
-                <a href="builds.html" id="smart-builds-link">التجميعات الذكية</a>
+                <ul class="flex space-x-4 rtl:space-x-reverse">
+                    <li><a href="#products" class="hover:text-gray-300">المنتجات</a></li>
+                    <li><a href="#" class="hover:text-gray-300">التجميعات</a></li> <li><a href="#ask-me-section" class="hover:text-gray-300">اسألني</a></li>
+                </ul>
             </nav>
-        </header>
-
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="ابحث عن منتج...">
-            <button id="search-button">بحث</button>
         </div>
-        <button id="ask-button">أسئلة شائعة</button>
+    </header>
 
-        <div class="section" id="graphicsCards-section">
-            <div class="section-header-container">
-                <h2 class="section-header">كروت الشاشة</h2>
-                <span class="section-header-arrow open">▼</span>
+    <main class="container py-8">
+        <section class="mb-8 p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-200">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-100">البحث عن منتج</h2>
+            <div class="flex">
+                <input type="text" id="product-search-input" placeholder="ابحث بالاسم أو التفاصيل..."
+                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                <button onclick="searchProducts()"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2 focus:outline-none focus:shadow-outline dark:bg-indigo-600 dark:hover:bg-indigo-700">
+                    بحث
+                </button>
             </div>
-            <div class="section-content visible" id="graphicsCards-products">
-                <div class="sort-filter-controls">
-                    <div class="range-filter-container">
-                        <label for="min-price-graphicsCards">السعر من:</label>
-                        <input type="number" id="min-price-graphicsCards" placeholder="أقل سعر">
-                        <label for="max-price-graphicsCards">إلى:</label>
-                        <input type="number" id="max-price-graphicsCards" placeholder="أعلى سعر">
-                        <button class="apply-range-filter" data-category="graphicsCards">تطبيق</button>
-                    </div>
+        </section>
+
+        <section id="products" class="mb-8">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100 text-center">منتجاتنا</h2>
+
+            <div class="collapsible-wrapper">
+                <div class="collapsible-header" onclick="toggleSection('gpu-products-container', this)">
+                    <span>كروت الشاشة (GPUs)</span>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="products">
+                <div id="gpu-products-container" class="collapsible-content">
+                    <div class="price-filter mb-4 p-4 bg-gray-100 rounded-md dark:bg-gray-700">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                            تصفية حسب نطاق السعر (جنيه):
+                        </label>
+                        <div class="flex space-x-4 rtl:space-x-reverse items-center">
+                            <input type="number" id="gpu-min-price" placeholder="الحد الأدنى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <span class="text-gray-700 dark:text-gray-300">-</span>
+                            <input type="number" id="gpu-max-price" placeholder="الحد الأقصى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <button onclick="filterProductsBySection('gpu')"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-indigo-600 dark:hover:bg-indigo-700">
+                                تصفية
+                            </button>
+                        </div>
                     </div>
-            </div>
-        </div>
-
-        <div class="section" id="processors-section">
-            <div class="section-header-container">
-                <h2 class="section-header">المعالجات</h2>
-                <span class="section-header-arrow">▼</span>
-            </div>
-            <div class="section-content" id="processors-products">
-                <div class="sort-filter-controls">
-                    <div class="range-filter-container">
-                        <label for="min-price-processors">السعر من:</label>
-                        <input type="number" id="min-price-processors" placeholder="أقل سعر">
-                        <label for="max-price-processors">إلى:</label>
-                        <input type="number" id="max-price-processors" placeholder="أعلى سعر">
-                        <button class="apply-range-filter" data-category="processors">تطبيق</button>
-                    </div>
+                    <div id="gpu-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
                 </div>
-                <div class="products">
-                    </div>
             </div>
-        </div>
 
-        <div class="section" id="memory-section">
-            <div class="section-header-container">
-                <h2 class="section-header">الذاكرة العشوائية (RAM)</h2>
-                <span class="section-header-arrow">▼</span>
-            </div>
-            <div class="section-content" id="memory-products">
-                <div class="sort-filter-controls">
-                    <div class="range-filter-container">
-                        <label for="min-price-memory">السعر من:</label>
-                        <input type="number" id="min-price-memory" placeholder="أقل سعر">
-                        <label for="max-price-memory">إلى:</label>
-                        <input type="number" id="max-price-memory" placeholder="أعلى سعر">
-                        <button class="apply-range-filter" data-category="memory">تطبيق</button></div>
-                <div class="products">
-                    </div>
-            </div>
-        </div>
-
-        <div class="section" id="storage-section">
-            <div class="section-header-container">
-                <h2 class="section-header">وحدات التخزين</h2>
-                <span class="section-header-arrow">▼</span>
-            </div>
-            <div class="section-content" id="storage-products">
-                <div class="sort-filter-controls">
-                    <div class="range-filter-container">
-                        <label for="min-price-storage">السعر من:</label>
-                        <input type="number" id="min-price-storage" placeholder="أقل سعر">
-                        <label for="max-price-storage">إلى:</label>
-                        <input type="number" id="max-price-storage" placeholder="أعلى سعر">
-                        <button class="apply-range-filter" data-category="storage">تطبيق</button>
-                    </div>
+            <div class="collapsible-wrapper">
+                <div class="collapsible-header" onclick="toggleSection('processor-products-container', this)">
+                    <span>المعالجات (Processors)</span>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="products">
+                <div id="processor-products-container" class="collapsible-content">
+                    <div class="price-filter mb-4 p-4 bg-gray-100 rounded-md dark:bg-gray-700">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                            تصفية حسب نطاق السعر (جنيه):
+                        </label>
+                        <div class="flex space-x-4 rtl:space-x-reverse items-center">
+                            <input type="number" id="processor-min-price" placeholder="الحد الأدنى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <span class="text-gray-700 dark:text-gray-300">-</span>
+                            <input type="number" id="processor-max-price" placeholder="الحد الأقصى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <button onclick="filterProductsBySection('processor')"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-indigo-600 dark:hover:bg-indigo-700">
+                                تصفية
+                            </button>
+                        </div>
                     </div>
-            </div>
-        </div>
-
-        <div class="section" id="headphones-section">
-            <div class="section-header-container">
-                <h2 class="section-header">السماعات</h2>
-                <span class="section-header-arrow">▼</span>
-            </div>
-            <div class="section-content" id="headphones-products">
-                <div class="sort-filter-controls">
-                    <div class="range-filter-container">
-                        <label for="min-price-headphones">السعر من:</label>
-                        <input type="number" id="min-price-headphones" placeholder="أقل سعر">
-                        <label for="max-price-headphones">إلى:</label>
-                        <input type="number" id="max-price-headphones" placeholder="أعلى سعر">
-                        <button class="apply-range-filter" data-category="headphones">تطبيق</button>
-                    </div>
+                    <div id="processor-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
                 </div>
-                <div class="products">
-                    </div>
             </div>
-        </div>
 
-        <div class="section" id="keyboards-section">
-            <div class="section-header-container">
-                <h2 class="section-header">الكيبوردات</h2>
-                <span class="section-header-arrow">▼</span>
-            </div>
-            <div class="section-content" id="keyboards-products">
-                <div class="sort-filter-controls">
-                    <div class="range-filter-container">
-                        <label for="min-price-keyboards">السعر من:</label>
-                        <input type="number" id="min-price-keyboards" placeholder="أقل سعر">
-                        <label for="max-price-keyboards">إلى:</label>
-                        <input type="number" id="max-price-keyboards" placeholder="أعلى سعر">
-                        <button class="apply-range-filter" data-category="keyboards">تطبيق</button>
-                    </div>
+            <div class="collapsible-wrapper">
+                <div class="collapsible-header" onclick="toggleSection('motherboard-products-container', this)">
+                    <span>اللوحات الأم (Motherboards)</span>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="products">
+                <div id="motherboard-products-container" class="collapsible-content">
+                    <div class="price-filter mb-4 p-4 bg-gray-100 rounded-md dark:bg-gray-700">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                            تصفية حسب نطاق السعر (جنيه):
+                        </label>
+                        <div class="flex space-x-4 rtl:space-x-reverse items-center">
+                            <input type="number" id="motherboard-min-price" placeholder="الحد الأدنى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <span class="text-gray-700 dark:text-gray-300">-</span>
+                            <input type="number" id="motherboard-max-price" placeholder="الحد الأقصى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <button onclick="filterProductsBySection('motherboard')"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-indigo-600 dark:hover:bg-indigo-700">
+                                تصفية
+                            </button>
+                        </div>
                     </div>
-            </div>
-        </div>
-
-        <div class="section" id="mice-section">
-            <div class="section-header-container">
-                <h2 class="section-header">الماوسات</h2>
-                <span class="section-header-arrow">▼</span>
-            </div>
-            <div class="section-content" id="mice-products">
-                <div class="sort-filter-controls">
-                    <div class="range-filter-container">
-                        <label for="min-price-mice">السعر من:</label>
-                        <input type="number" id="min-price-mice" placeholder="أقل سعر">
-                        <label for="max-price-mice">إلى:</label>
-                        <input type="number" id="max-price-mice" placeholder="أعلى سعر">
-                        <button class="apply-range-filter" data-category="mice">تطبيق</button>
-                    </div>
+                    <div id="motherboard-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
                 </div>
-                <div class="products">
-                    </div>
             </div>
-        </div>
 
-        <div id="product-details-modal">
-            <div class="modal-content">
-                <button class="close-modal-btn">&times;</button>
-                <div class="product-full-details">
-                    <img src="" alt="صورة المنتج" id="modal-image">
-                    <h2 id="modal-title"></h2>
-                    <p id="modal-details"></p>
-                    <p class="price" id="modal-price"></p>
-                    <p class="rating" id="modal-rating"></p>
+            <div class="collapsible-wrapper">
+                <div class="collapsible-header" onclick="toggleSection('ram-products-container', this)">
+                    <span>الذاكرة العشوائية (RAM)</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="ram-products-container" class="collapsible-content">
+                    <div class="price-filter mb-4 p-4 bg-gray-100 rounded-md dark:bg-gray-700">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                            تصفية حسب نطاق السعر (جنيه):
+                        </label>
+                        <div class="flex space-x-4 rtl:space-x-reverse items-center">
+                            <input type="number" id="ram-min-price" placeholder="الحد الأدنى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <span class="text-gray-700 dark:text-gray-300">-</span>
+                            <input type="number" id="ram-max-price" placeholder="الحد الأقصى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <button onclick="filterProductsBySection('ram')"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-indigo-600 dark:hover:bg-indigo-700">
+                                تصفية
+                            </button>
+                        </div>
                     </div>
+                    <div id="ram-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
+                </div>
             </div>
-        </div>
 
-    </div>
+            <div class="collapsible-wrapper">
+                <div class="collapsible-header" onclick="toggleSection('monitor-products-container', this)">
+                    <span>الشاشات (Monitors)</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="monitor-products-container" class="collapsible-content">
+                    <div class="price-filter mb-4 p-4 bg-gray-100 rounded-md dark:bg-gray-700">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                            تصفية حسب نطاق السعر (جنيه):
+                        </label>
+                        <div class="flex space-x-4 rtl:space-x-reverse items-center">
+                            <input type="number" id="monitor-min-price" placeholder="الحد الأدنى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <span class="text-gray-700 dark:text-gray-300">-</span>
+                            <input type="number" id="monitor-max-price" placeholder="الحد الأقصى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <button onclick="filterProductsBySection('monitor')"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-indigo-600 dark:hover:bg-indigo-700">
+                                تصفية
+                            </button>
+                        </div>
+                    </div>
+                    <div id="monitor-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
+                </div>
+            </div>
+
+            <div class="collapsible-wrapper">
+                <div class="collapsible-header" onclick="toggleSection('cooler-products-container', this)">
+                    <span>المبردات (Coolers)</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="cooler-products-container" class="collapsible-content">
+                    <div class="price-filter mb-4 p-4 bg-gray-100 rounded-md dark:bg-gray-700">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                            تصفية حسب نطاق السعر (جنيه):
+                        </label>
+                        <div class="flex space-x-4 rtl:space-x-reverse items-center">
+                            <input type="number" id="cooler-min-price" placeholder="الحد الأدنى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <span class="text-gray-700 dark:text-gray-300">-</span>
+                            <input type="number" id="cooler-max-price" placeholder="الحد الأقصى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <button onclick="filterProductsBySection('cooler')"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-indigo-600 dark:hover:bg-indigo-700">
+                                تصفية
+                            </button>
+                        </div>
+                    </div>
+                    <div id="cooler-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
+                </div>
+            </div>
+
+            <div class="collapsible-wrapper">
+                <div class="collapsible-header" onclick="toggleSection('keyboard-products-container', this)">
+                    <span>لوحات المفاتيح (Keyboards)</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="keyboard-products-container" class="collapsible-content">
+                    <div class="price-filter mb-4 p-4 bg-gray-100 rounded-md dark:bg-gray-700">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                            تصفية حسب نطاق السعر (جنيه):
+                        </label>
+                        <div class="flex space-x-4 rtl:space-x-reverse items-center">
+                            <input type="number" id="keyboard-min-price" placeholder="الحد الأدنى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <span class="text-gray-700 dark:text-gray-300">-</span>
+                            <input type="number" id="keyboard-max-price" placeholder="الحد الأقصى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <button onclick="filterProductsBySection('keyboard')"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-indigo-600 dark:hover:bg-indigo-700">
+                                تصفية
+                            </button>
+                        </div>
+                    </div>
+                    <div id="keyboard-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
+                </div>
+            </div>
+
+            <div class="collapsible-wrapper">
+                <div class="collapsible-header" onclick="toggleSection('mouse-products-container', this)">
+                    <span>الماوسات (Mice)</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="mouse-products-container" class="collapsible-content">
+                    <div class="price-filter mb-4 p-4 bg-gray-100 rounded-md dark:bg-gray-700">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                            تصفية حسب نطاق السعر (جنيه):
+                        </label>
+                        <div class="flex space-x-4 rtl:space-x-reverse items-center">
+                            <input type="number" id="mouse-min-price" placeholder="الحد الأدنى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <span class="text-gray-700 dark:text-gray-300">-</span>
+                            <input type="number" id="mouse-max-price" placeholder="الحد الأقصى"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200">
+                            <button onclick="filterProductsBySection('mouse')"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-indigo-600 dark:hover:bg-indigo-700">
+                                تصفية
+                            </button>
+                        </div>
+                    </div>
+                    <div id="mouse-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ask-me-section" class="mb-8 p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-200">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-100">اسألني أي سؤال!</h2>
+            <div class="mb-4">
+                <label for="ask-me-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                    اطرح سؤالك هنا:
+                </label>
+                <input type="text" id="ask-me-input" placeholder="مثال: ما هي أفضل كروت الشاشة للألعاب؟"
+                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+            </div>
+            <button onclick="submitQuestion()"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-emerald-600 dark:hover:bg-emerald-700">
+                إرسال السؤال
+            </button>
+            <div id="ask-me-answer" class="mt-4 p-3 bg-gray-100 rounded-md text-gray-800 dark:bg-gray-700 dark:text-gray-200 hidden">
+                </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 text-center shadow-inner mt-8">
+        <div class="container">
+            <p>متجر الألعاب © <span id="current-year"></span>.</p>
+        </div>
+    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const themeToggle = document.getElementById('theme-toggle');
-            const body = document.body;
-            const searchInput = document.getElementById('search-input');
-            const searchButton = document.getElementById('search-button');
-            const askButton = document.getElementById('ask-button');
-            const productDetailsModal = document.getElementById('product-details-modal');
-            const closeModalBtn = productDetailsModal.querySelector('.close-modal-btn');
-            const modalImage = document.getElementById('modal-image');
-            const modalTitle = document.getElementById('modal-title');
-            const modalDetails = document.getElementById('modal-details');
-            const modalPrice = document.getElementById('modal-price');
-            const modalRating = document.getElementById('modal-rating');
-            const sectionHeaders = document.querySelectorAll('.section-header-container');
-            const applyPriceFilters = document.querySelectorAll('.apply-range-filter');
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
 
-            let catalog = {
-                graphicsCards: [
-                    {
-                        id: 'nvidia-rtx-4090-24gb',
-                        name: 'NVIDIA GeForce RTX 4090',
-                        memory: '24 جيجابايت GDDR6X',
-                        price: 238500.00,
-                        source: 'Ubuy',
-                        rating: 5.0,
-                        details: 'أقوى كارت شاشة من NVIDIA حتى الآن، مثالي للألعاب بدقة 4K والتصميم ثلاثي الأبعاد.',
-                        brand: 'NVIDIA',
-                        category: 'الفئة العليا',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'asus-rtx-4090-24gb',
-                        name: 'اسوس انفيديا جي فورس RTX 4090',
-                        memory: '24 جيجا بايت DDR6X',
-                        price: 262367.10,
-                        source: 'Microless.com',
-                        rating: 4.5,
-                        brand: 'NVIDIA',
-                        category: 'الفئة العليا',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'nvidia-rtx-4080-16gb',
-                        name: 'NVIDIA GeForce RTX 4080',
-                        memory: '16 جيجابايت GDDR6X',
-                        price: 148983.00,
-                        source: 'Ubuy',
-                        rating: 5.0,
-                        brand: 'NVIDIA',
-                        category: 'الفئة العليا',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'zotac-rtx-4080-super-trinity-oc',
-                        name: 'ZOTAC GAMING GeForce RTX 4080 SUPER Trinity OC',
-                        price: 59280.00,
-                        source: 'PCS - Souq',
-                        rating: 4.8,
-                        details: 'أداء ممتاز مع تصميم تبريد ثلاثي المراوح، مناسب للاستخدام المكثف.',
-                        brand: 'NVIDIA',
-                        category: 'الفئة العليا',
-                        memory: '16GB',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'gigabyte-rtx-4070-ti-super-oc',
-                        name: 'Gigabyte WINDFORCE GeForce RTX 4070 Ti SUPER OC',
-                        memory: '16GB GDDR6X',
-                        price: 46800.00,
-                        source: 'PCS - Souq',
-                        brand: 'NVIDIA',
-                        category: 'الفئة العليا',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'zotac-rtx-4070-12gb',
-                        name: 'بطاقة رسومات الألعاب زوتاك جي فورس RTX 4070',
-                        memory: '12 جيجا',
-                        price: 31666.00,
-                        source: 'PCS - Souq',
-                        rating: 4.9,
-                        brand: 'NVIDIA',
-                        category: 'الفئة العليا',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'msi-rtx-4060-ventus-2x-oc',
-                        name: 'MSI GeForce RTX 4060 Ventus 2X OC',
-                        memory: '8 جيجا',
-                        price: 16980.00,
-                        source: 'Amazon.eg - Seller',
-                        rating: 4.7,
-                        details: 'خيار اقتصادي بأداء جيد للألعاب بدقة 1080p.',
-                        brand: 'NVIDIA',
-                        category: 'الفئة المتوسطة',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'asus-gtx-1660s-a6g',
-                        name: 'Asus Rog Strix GTX 1660S A6G الإصدار المتقدم للألعاب',
-                        memory: '6GB',
-                        price: 11785.56,
-                        source: 'Microless.com',
-                        rating: 4.8,
-                        brand: 'NVIDIA',
-                        category: 'الفئة الاقتصادية',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'nvidia-rtx-4080-super-16gb-new',
-                        name: 'RTX 4080 Super',
-                        memory: '16GB',
-                        price: 56000.00,
-                        notes: 'أداء فائق للألعاب بدقة 4K والتصميم الاحترافي',
-                        brand: 'NVIDIA',
-                        category: 'الفئة العليا',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'nvidia-rtx-4070-ti-super-16gb-new',
-                        name: 'RTX 4070 Ti Super',
-                        memory: '16GB',
-                        price: 48500.00,
-                        notes: 'أداء عالي، مناسب للألعاب بدقة 4K',
-                        brand: 'NVIDIA',
-                        category: 'الفئة العليا',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'nvidia-rtx-4070-super-12gb-new',
-                        name: 'RTX 4070 Super',
-                        memory: '12GB',
-                        price: 36524.50,
-                        notes: 'توازن بين الأداء والسعر، مناسب للألعاب بدقة 1440p و4K',
-                        brand: 'NVIDIA',
-                        category: 'الفئة العليا',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'nvidia-rtx-4060-ti-16gb-new',
-                        name: 'RTX 4060 Ti',
-                        memory: '16GB',
-                        price: 24974.50,
-                        notes: 'أداء ممتاز للألعاب بدقة 1440p',
-                        brand: 'NVIDIA',
-                        category: 'الفئة المتوسطة',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'nvidia-rtx-4060-ti-8gb-new',
-                        name: 'RTX 4060 Ti',
-                        memory: '8GB',
-                        price: 19000.00,
-                        notes: 'أداء جيد للألعاب بدقة 1080p و1440p',
-                        brand: 'NVIDIA',
-                        category: 'الفئة المتوسطة',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'nvidia-rtx-4060-8gb-new',
-                        name: 'RTX 4060',
-                        memory: '8GB',
-                        price: 15749.50,
-                        notes: 'خيار اقتصادي مع أداء مناسب للألعاب بدقة 1080p',
-                        brand: 'NVIDIA',
-                        category: 'الفئة المتوسطة',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'nvidia-rtx-3050-6gb-new',
-                        name: 'RTX 3050',
-                        memory: '6GB',
-                        price: 10287.00,
-                        notes: 'مناسب للألعاب بدقة 1080p مع إعدادات متوسطة',
-                        brand: 'NVIDIA',
-                        category: 'الفئة الاقتصادية',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'nvidia-gtx-1660-super-6gb-new',
-                        name: 'GTX 1660 Super',
-                        memory: '6GB',
-                        price: 8800.00,
-                        notes: 'أداء جيد للألعاب بدقة 1080p',
-                        brand: 'NVIDIA',
-                        category: 'الفئة الاقتصادية',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'nvidia-gt-730-4gb',
-                        name: 'GT 730',
-                        memory: '4GB DDR3',
-                        price: 3050.00,
-                        notes: 'مناسب للاستخدامات الأساسية ومشاهدة الفيديو',
-                        brand: 'NVIDIA',
-                        category: 'الفئة الاقتصادية',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'amd-rx-7900-xtx-24gb',
-                        name: 'RX 7900 XTX',
-                        memory: '24GB',
-                        price: 39900.00,
-                        notes: 'أداء فائق، منافس لـ RTX 4090',
-                        brand: 'AMD',
-                        category: 'الفئة العليا',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'amd-rx-7900-xt-20gb',
-                        name: 'RX 7900 XT',
-                        memory: '20GB',
-                        price: 36500.00,
-                        notes: 'أداء عالي، مناسب للألعاب بدقة 4K',
-                        brand: 'AMD',
-                        category:'الفئة العليا',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'amd-rx-7700-xt-12gb',
-                        name: 'RX 7700 XT',
-                        memory: '12GB',
-                        price: 22725.00,
-                        notes: 'أداء ممتاز للألعاب بدقة 1440p',
-                        brand: 'AMD',
-                        category: 'الفئة المتوسطة',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'amd-rx-7600-8gb',
-                        name: 'RX 7600',
-                        memory: '8GB',
-                        price: 13500.00,
-                        notes: 'خيار جيد للألعاب بدقة 1080p و1440p',
-                        brand: 'AMD',
-                        category: 'الفئة المتوسطة',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'amd-rx-6750-xt-12gb',
-                        name: 'RX 6750 XT',
-                        memory: '12GB',
-                        price: 18500.00,
-                        notes: 'توازن بين الأداء والسعر',
-                        brand: 'AMD',
-                        category: 'الفئة المتوسطة',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'amd-rx-6500-xt-4gb',
-                        name: 'RX 6500 XT',
-                        memory: '4GB',
-                        price: 8450.00,
-                        notes: 'خيار اقتصادي للألعاب الخفيفة',
-                        brand: 'AMD',
-                        category: 'الفئة الاقتصادية',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'amd-rx-580-8gb',
-                        name: 'RX 580',
-                        memory: '8GB',
-                        price: 11200.00,
-                        notes: 'أداء جيد للألعاب بدقة 1080p',
-                        brand: 'AMD',
-                        category: 'الفئة الاقتصادية',
-                        image: 'https://m.media-amazon.com/images/I/81wtjYEqDlL._AC_SL1500_.jpg'
+        // Function to generate star rating HTML
+        function generateStarRating(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating - fullStars >= 0.5;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+            let starsHtml = '';
+            for (let i = 0; i < fullStars; i++) {
+                starsHtml += '<i class="fas fa-star text-yellow-400"></i>';
+            }
+            if (halfStar) {
+                starsHtml += '<i class="fas fa-star-half-alt text-yellow-400"></i>';
+            }
+            for (let i = 0; i < emptyStars; i++) {
+                starsHtml += '<i class="far fa-star text-yellow-400"></i>';
+            }
+            return starsHtml;
+        }
+
+        // Product Data Arrays
+        const gpuProducts = [
+            { name: "GTX 1050 Ti", details: "4GB GDDR5، يشغل لعب 1080p خفيف", rating: 4, price: 2250 },
+            { name: "GTX 1650 Super", details: "4GB GDDR6، أحسن بكتير من 1050 Ti", rating: 4, price: 3750 },
+            { name: "RX 570 4GB", details: "أداء ممتاز بس يسخن شوية", rating: 4, price: 2750 },
+            { name: "RTX 3050", details: "8GB، دعم تتبع الأشعة، حلوة للألعاب الجديدة", rating: 4, price: 8000 },
+            { name: "RX 6600", details: "8GB، أقوى من RTX 3050 وسعره أقل", rating: 4, price: 7850 },
+            { name: "RTX 3060", details: "12GB، للناس اللي بتلعب بجرافيك عالي", rating: 4.5, price: 9500 },
+            { name: "RTX 4060 Ti", details: "16GB، حديث وقوي وشكله حلو", rating: 4, price: 13500 },
+            { name: "RTX 4070", details: "ممتاز للـ 1440p وحتى 4K متوسط", rating: 5, price: 17500 },
+            { name: "RX 7800 XT", details: "منافس للـ 4070 بس أرخص شوية", rating: 4.5, price: 15750 },
+            { name: "RTX 4080 Super", details: "16GB GDDR6X، أدائه جبار", rating: 5, price: 30000 },
+            { name: "RTX 4090", details: "وحش الألعاب، يشيل 4K بأعلى إعدادات", rating: 5, price: 50000 },
+        ];
+
+        const processorProducts = [
+            { name: "Core i3-14100F", details: "4 أنوية / 8 خيوط، 3.5GHz / 4.7GHz", rating: 4, price: 5999 },
+            { name: "Core i5-13400", details: "10 أنوية / 16 خيط، 2.5GHz / 4.6GHz", rating: 4, price: 8500 },
+            { name: "Core i5-14400F", details: "10 أنوية / 16 خيط، 2.5GHz / 4.7GHz", rating: 4, price: 11800 },
+            { name: "Core i7-14700KF", details: "20 أنوية / 28 خيط، 3.4GHz / 5.6GHz", rating: 5, price: 19999 },
+            { name: "Core i9-14900KF", details: "24 أنوية / 32 خيط، 3.2GHz / 6.0GHz", rating: 5, price: 28299 },
+            { name: "Core Ultra 9 285K", details: "24 أنوية / 32 خيط، 3.2GHz / 5.8GHz", rating: 4.5, price: 32500 },
+            { name: "Ryzen 5 5500", details: "6 أنوية / 12 خيط، 3.6GHz / 4.2GHz", rating: 4, price: 4650 },
+            { name: "Ryzen 5 5600X", details: "6 أنوية / 12 خيط، 3.7GHz / 4.6GHz", rating: 4, price: 6900 },
+            { name: "Ryzen 5 7600", details: "6 أنوية / 12 خيط، 3.8GHz / 5.1GHz", rating: 4.5, price: 9999 },
+            { name: "Ryzen 7 5700X", details: "8 أنوية / 16 خيط، 3.4GHz / 4.6GHz", rating: 4.5, price: 8500 },
+            { name: "Ryzen 9 7900", details: "12 أنوية / 24 خيط، 3.7GHz / 5.4GHz", rating: 5, price: 20000 },
+            { name: "Ryzen 9 9950X3D", details: "16 أنوية / 32 خيط، 4.2GHz / 5.7GHz", rating: 5, price: 41999 },
+        ];
+
+        const motherboardProducts = [
+            { name: "ASUS ROG Maximus Z790 Hero", details: "Socket: LGA 1700 (Intel 13–14)، طاقة VRM قوية 16+1 مرحلة، دعم DDR5 حتى 6400 MHz، 3 فتحات M.2، Wi-Fi 6E و10 GbE، RGB مدمج", rating: 5, price: 20000, socket: "LGA 1700", chipset: "Z790" },
+            { name: "Gigabyte Z890 AORUS Master", details: "Socket: LGA 1851 (Core Ultra/Arrow Lake)، PCIe 5.0 متعدد، USB-C 20 Gbps، تبريد VRM قوي، تصاميم محسّنة للألعاب الثقيلة", rating: 5, price: 13500, socket: "LGA 1851", chipset: "Z890" },
+            { name: "ASUS TUF Gaming Z890-Pro Wi-Fi", details: "Socket: LGA 1851، دعم DDR5 حتى 9066 MHz، 4 فتحات M.2، LAN 2.5 Gb، Wi-Fi 7، Thunderbolt 4 مزدوج", rating: 4.5, price: 9000, socket: "LGA 1851", chipset: "Z890" },
+            { name: "Gigabyte B760M Gaming X DDR5", details: "Socket: LGA 1700، Micro-ATX، دعم DDR5، PCIe 4.0، تصميم متوازن للميزانية", rating: 4, price: 6850, socket: "LGA 1700", chipset: "B760" },
+            { name: "MSI MPG X870E Carbon WiFi", details: "Socket: AM5، DDR5، PCIe 5.0 بطاقات تخزين وGPU، USB4، Wi-Fi 7، تصميم VRM ممتاز", rating: 4.5, price: 10500, socket: "AM5", chipset: "X870E" },
+            { name: "MSI MAG X870E Tomahawk", details: "Socket: AM5، VRM 14+2+1 مع Wi-Fi 7 و5Gb LAN، 4 فتحات M.2، USB متعددة", rating: 4.5, price: 9000, socket: "AM5", chipset: "X870E" },
+            { name: "ASRock X870E Taichi Lite", details: "Socket: AM5 (E-ATX)، VRM 24+2+1، Wi-Fi 7، 4 M.2، USB4، قابلية OC قوية", rating: 5, price: 11500, socket: "AM5", chipset: "X870E" },
+            { name: "ASUS TUF Gaming B650-PLUS WiFi", details: "Socket: AM5، DDR5، PCIe 5.0 GPU، VRM 14+2، Wi-Fi 6، 2.5Gb LAN", rating: 4.5, price: 7250, socket: "AM5", chipset: "B650" },
+        ];
+
+        const ramProducts = [
+            { name: "Corsair Vengeance DDR5 5600 32 GB (2×16)", details: "السرعة: 5600 MHz (XMP 3.0)، التيمينج: CL40-36-36-76، التوصيل: DIMM، يدعم Intel 600/700", rating: 4.5, price: 5850, type: "DDR5", capacity: "32GB (2x16)", speed: "5600 MHz", timings: "CL40" },
+            { name: "Corsair Vengeance RGB DDR5 6000 32 GB (2×16)", details: "السرعة: 6000 MHz، التيمينج: CL38، ميزات: RGB، دعم AMD EXPO، ارتفاع منخفض نسبيًا", rating: 4.5, price: 6900, type: "DDR5", capacity: "32GB (2x16)", speed: "6000 MHz", timings: "CL38" },
+            { name: "Corsair Vengeance RGB DDR5 6400 32 GB (2×16)", details: "السرعة: 6400 MHz (CL32)، أداء مثالي للبنايات الراقية مع RGB مدمج", rating: 5, price: 9999, type: "DDR5", capacity: "32GB (2x16)", speed: "6400 MHz", timings: "CL32" },
+            { name: "Team Group T-Force Vulcan DDR5 6000 32 GB (1×32)", details: "السرعة: 6000 MHz (CL38)، خيار اقتصادي قوي، دعم XMP/EXPO ومعدلات أداء جيدة", rating: 4, price: 6700, type: "DDR5", capacity: "32GB (1x32)", speed: "6000 MHz", timings: "CL38" },
+            { name: "G.Skill Trident Z5 RGB DDR5 6000 32 GB (2×16)", details: "السرعة: 6000 MHz (CL30)، تتحسن للبناءات AMD عبر EXPO، أداء ممتاز وتيمينج أفضل", rating: 5, price: 8900, type: "DDR5", capacity: "32GB (2x16)", speed: "6000 MHz", timings: "CL30" },
+            { name: "G.Skill Ripjaws V DDR4 3200 32 GB (2×16)", details: "السرعة: 3200 MHz (CL16)، خيار اقتصادي ممتاز مع توافق واسع", rating: 4, price: 4800, type: "DDR4", capacity: "32GB (2x16)", speed: "3200 MHz", timings: "CL16" },
+        ];
+
+
+        const monitorProducts = [
+            { name: "Philips Evnia 24M2N3200A", details: "لوحة IPS 23.8\" FHD، 180 Hz، استجابة 1 ms، HDR10، FreeSync/G-Sync، سماعات مدمجة، قابلية تعديل ارتفاع", rating: 4.5, price: 7400, size: "23.8 بوصة", resolution: "FHD (1920x1080)", refreshRate: "180Hz" },
+            { name: "Philips Evnia 25M2N3200W", details: "24.5\" FHD VA، 240 Hz، استجابة 0.5 ms، دعم FreeSync، تعديل ارتفاع", rating: 4.5, price: 6999, size: "24.5 بوصة", resolution: "FHD (1920x1080)", refreshRate: "240Hz" },
+            { name: "Philips Evnia 27M2N5500", details: "شاشة QHD 27\"، Fast-IPS، 180 Hz/144 Hz، استجابة 1 ms، HDR400، FreeSync/G-Sync، تعديل كامل", rating: 4.5, price: 12499, size: "27 بوصة", resolution: "QHD (2560x1440)", refreshRate: "180Hz" },
+            { name: "Philips Evnia 27M2N8500", details: "QD-OLED، 26.5\" QHD، 360 Hz، استجابة 0.03 ms، FreeSync Premium/G-Sync، سماعات مدمجة", rating: 5, price: 47700, size: "26.5 بوصة", resolution: "QHD (2560x1440)", refreshRate: "360Hz" },
+            { name: "Sony InZone M10S", details: "27\" QHD OLED 480 Hz، عروض عالمية ثابتة", rating: 4.8, price: null, size: "27 بوصة", resolution: "QHD OLED", refreshRate: "480Hz" }, // Price null
+            { name: "Samsung Odyssey G8", details: "4K QD-OLED 240 Hz، أداء فائق لمستخدمي RTX 50XX", rating: 4.9, price: null, size: "غير محدد", resolution: "4K QD-OLED", refreshRate: "240Hz" }, // Price null
+            { name: "Samsung Odyssey OLED G6", details: "27\" QHD OLED 500 Hz، أسرع شاشة OLED في العالم من سامسونج", rating: 4.9, price: null, size: "27 بوصة", resolution: "QHD OLED", refreshRate: "500Hz" }, // Price null
+            { name: "Alienware AW3425DWM", details: "34\" Ultrawide QD-OLED 180 Hz، تجربة من عالم آخر", rating: 5, price: null, size: "34 بوصة", resolution: "Ultrawide QD-OLED", refreshRate: "180Hz" }, // Price null
+        ];
+
+        const coolerProducts = [
+            { name: "Arctic Liquid Freezer III 360", type: "مائي (AIO)", fans: "3x120mm", noise: "0.3–24.5 دBA", price: 6750, rating: 4.9, details: "رادياتور 360 مم، مضخة متقدمة، مروحة VRM مدمجة، ضمان 6 سنوات" },
+            { name: "Corsair iCUE H150i Elite Capellix (360 مم)", type: "مائي (AIO)", fans: "3x120mm", noise: "10–34 دBA", price: 10000, rating: 4.8, details: "رادياتور 360 مم، مضخة Asetek الجيل السابع، شاشات Capellix RGB، ضمان 5 سنوات" },
+            { name: "Cooler Master MasterLiquid ML240L RGB V2 (240 مم)", type: "مائي (AIO)", fans: "2x120mm", noise: "<30 دBA", price: 5000, rating: 4, details: "رادياتور 240 مم، مروحتان PWM، أنابيب متينة، إدارة RGB مرنة" },
+            { name: "NZXT Kraken Z73 V2 / Kraken 360", type: "مائي (AIO)", fans: "3x120mm", noise: "غير محدد", price: 11000, rating: 4.7, details: "رادياتور 360 مم، شاشة LCD على رأس المضخة، مراوح AR/P PWM، مظهر أنيق" },
+            { name: "Noctua NH-D15 G2", type: "هوائي", fans: "2x140mm", noise: "أقل ضوضاء", price: 4750, rating: 4.7, details: "مبرد برج مزدوج، مراوح مزدوجة، أداء قريب من AIO" },
+            { name: "Be Quiet! Dark Rock 5", type: "هوائي", fans: "1x135mm (Silent Wings 4)", noise: "≤29.8 دBA", price: 4000, rating: 4.5, details: "برج واحد، مروحة Silent Wings 4، مناسب لمعالجات Ryzen وCore Ultra" },
+            { name: "Arctic Freezer 36 A-RGB", type: "هوائي", fans: "2x120mm ARGB", noise: "غير محدد", price: 3000, rating: 4.3, details: "برج ثنائي مزود بمراوح ARGB، تركيب سريع، قيمة عالية جداً" },
+            { name: "Noctua NH-L12S", type: "هوائي (Slim)", fans: "1x120mm (low-profile)", noise: "غير محدد", price: 2500, rating: 4, details: "مناسب للأجهزة الصغيرة والنادر استخدامه في الأجهزة المدمجة" },
+        ];
+
+        const keyboardProducts = [
+            { name: "Attack Shark K75", details: "لوحة شفافة، مفاتيح ميكانيكية، RGB، 81 مفتاح، سلكي", rating: 4, price: 1700, keysType: "ميكانيكي", switches: "غير محدد" },
+            { name: "Redragon K630 Dragonborn", details: "60%، Hot-swap، RGB بـ13 وضع، مضاد تظليل", rating: 4, price: 1625, keysType: "ميكانيكي", switches: "أحمر/بني/أزرق" },
+            { name: "Redragon K617 FIZZ", details: "60%، Hot-swap، 20 وضع إضاءة RGB", rating: 4, price: 1399, keysType: "ميكانيكي", switches: "أحمر" },
+            { name: "Redragon K512 SHIVA", details: "Full-size، 7 أوضاع إضاءة، مسند معصم قابل للفصل", rating: 4, price: 1299, keysType: "ميكانيكي", switches: "Red feel" },
+            { name: "Redragon K568R Dark Avenger", details: "Ten-Key، سلكي، N-Key rollover، 9 وضع RGB، مقاوم للماء", rating: 4, price: 1249, keysType: "ميكانيكي", switches: "أزرق" },
+            { name: "Redragon K539 Anubis", details: "80%، لاسلكي/سلكي، اتصال ثلاثي، بطارية 1900 mAh", rating: 4.5, price: 3179, keysType: "ميكانيكي", switches: "بني" },
+            { name: "Redragon K530 Draconic Pro", details: "60%، لاسلكي/سلكي/BT، Hot-swap، RGB، بطارية جيدة", rating: 4.7, price: 2899, keysType: "ميكانيكي", switches: "خطي" },
+            { name: "Razer Huntsman Mini", details: "60%، تصميم مضغوط، يقل سعره عند العروض", rating: 4.5, price: 4750, keysType: "ميكانيكي", switches: "Opto-mechanical / Linear" },
+            { name: "Razer BlackWidow V3 Pro", details: "لاسلكي/سلكي، RGB، مفاتيح Yellow أو Green", rating: 4.5, price: 11000, keysType: "ميكانيكي", switches: "Yellow / Green" },
+            { name: "HyperX Alloy Origins 60%", details: "60%، جودة عالية، RGB", rating: 4.5, price: 4750, keysType: "ميكانيكي", switches: "HyperX Red/Brown" },
+            { name: "HyperX Alloy Elite 2", details: "Full-size، RGB، عجلة للتحكم بالـ volume", rating: 4.5, price: 6250, keysType: "ميكانيكي", switches: "Red" },
+        ];
+
+        const mouseProducts = [
+            { name: "Attack Shark R1", details: "59g، PixArt PAW3311 (حتى 18K DPI)، توصيل ثلاثي، بطارية ≈65 ساعة", rating: 4, price: 2400 },
+            { name: "Attack Shark X11", details: "63g، PAW3311 (حتى 22K DPI)، توصيل ثلاثي، قاعدة شحن مغناطيسية", rating: 4.5, price: 3250 },
+            { name: "Redragon M711 Cobra", details: "10K–12.4K DPI، 7 أزرار، سلكي/لاسلكي", rating: 4, price: 1065 },
+            { name: "Redragon M690 PRO", details: "8K DPI، لاسلكي + سلكي", rating: 4, price: 1545 },
+            { name: "Redragon M991", details: "لاسلكي، 19K DPI، 1000 mAh", rating: 4, price: null }, // Price not specified, set to null
+            { name: "Razer Viper V3 HyperSpeed", details: "≈54–55g، Focus Pro 30K DPI + HyperSpeed لاسلكي 8KHz", rating: 5, price: 8000 },
+            { name: "Razer Viper 8KHz (سلكي)", details: "71g، Focus+ 20K DPI، سلك Speedflex 8KHz polling", rating: 5, price: 5150 },
+            { name: "HyperX Pulsefire Haste (لاسلكي)", details: "61g، تصميم قشرة خلية، Pixart 3335 (حتى 16K DPI)، بطارية حتى 100 ساعة", rating: 4.5, price: 7899 },
+            { name: "HyperX Pulsefire Core (سلكي)", details: "حتى 6K–10K DPI، Omron switches", rating: 4.5, price: 4442 },
+            { name: "HyperX Pulsefire Haste 2 Pro", details: "61g، 26K DPI، 4KHz polling، لاسلكي/بلوتوث، بطارية ≈90 ساعة", rating: 4.5, price: 8750 },
+            { name: "HyperX Pulsefire Raid", details: "11 زر مخصص، RGB، سلكي", rating: 4, price: null }, // Price not specified, set to null
+        ];
+
+        // Combine all products for search functionality
+        const allProducts = [
+            ...gpuProducts,
+            ...processorProducts,
+            ...motherboardProducts, // Added motherboards to allProducts
+            ...ramProducts,         // Added RAM to allProducts
+            ...monitorProducts,
+            ...coolerProducts,
+            ...keyboardProducts,
+            ...mouseProducts,
+        ];
+
+        // --- FAQ Data for Ask Me feature ---
+        const faqAnswers = [
+            { question: "ما هي أفضل كروت الشاشة للألعاب؟", answer: "يعتمد ذلك على ميزانيتك ودقة الشاشة التي تستخدمها. بشكل عام، RTX 4080 Super و RTX 4090 خيارات ممتازة للأداء العالي." },
+            { question: "ما هو الفرق بين مبرد هوائي ومبرد مائي؟", answer: "المبرد الهوائي يستخدم مراوح لتشتيت الحرارة، بينما المبرد المائي يستخدم سائل تبريد ومضخة. المبردات المائية عادةً أفضل في تبريد المعالجات عالية الأداء." },
+            { question: "ما هي أفضل أنواع الكيبوردات للألعاب؟", answer: "الكيبوردات الميكانيكية تعتبر الأفضل للألعاب بسبب استجابتها السريعة ومتانتها. ابحث عن موديلات مثل Attack Shark K75 أو Redragon K630." },
+            { question: "كيف يمكنني اختيار الماوس المناسب لي؟", answer: "يعتمد ذلك على حجم يدك، نوع الألعاب التي تلعبها، وتفضيلاتك الشخصية. ابحث عن ماوس مريح يوفر دقة جيدة مثل Razer Viper V3 HyperSpeed أو Attack Shark R1." },
+            { question: "ما هي كروت الشاشة؟", answer: "كروت الشاشة (بطاقات الرسوميات) هي مكونات حاسوبية مهمة لمعالجة وعرض الصور والفيديوهات على الشاشة، وهي ضرورية للألعاب والتصميم الجرافيكي." },
+            { question: "ما هي أهمية المبردات في الكمبيوتر؟", answer: "المبردات ضرورية للحفاظ على درجة حرارة مكونات الكمبيوتر (خاصة المعالج وكارت الشاشة) ضمن الحدود الآمنة، مما يمنع ارتفاع درجة الحرارة ويحافظ على أداء الجهاز." },
+            { question: "ما هي الشاشات؟", answer: "الشاشات هي أجهزة عرض مرئية تستخدم لعرض المعلومات والصور من جهاز الكمبيوتر. تختلف الشاشات في الحجم والدقة ومعدل التحديث وزمن الاستجابة." },
+            { question: "ما هي الكيبوردات؟", answer: "الكيبوردات هي أجهزة إدخال تستخدم لإدخال النصوص والأوامر إلى الكمبيوتر. توجد أنواع مختلفة منها مثل الميكانيكية والغشائية، وتختلف في الإحساس والصوت والمتانة." },
+            { question: "ما هي الماوسات؟", answer: "الماوس هو جهاز إدخال يستخدم للتحكم في المؤشر على الشاشة والتفاعل مع العناصر الرسومية. تختلف الماوسات في الدقة (DPI)، عدد الأزرار، ونوع الاتصال (سلكي/لاسلكي)." },
+            { question: "ما هي المعالجات؟", answer: "المعالج (CPU) هو العقل المدبر للكمبيوتر، يقوم بتنفيذ التعليمات ومعالجة البيانات. يعتمد أداء الكمبيوتر بشكل كبير على قوة المعالج وعدد أنويته." },
+            { question: "ما هي اللوحات الأم؟", answer: "اللوحة الأم (Motherboard) هي المكون الرئيسي في الكمبيوتر الذي يربط جميع المكونات الأخرى ببعضها البعض، مثل المعالج والذاكرة العشوائية وكروت الشاشة، وتتيح لها التواصل." },
+            { question: "ما هي الذاكرة العشوائية؟", answer: "الذاكرة العشوائية (RAM) هي ذاكرة مؤقتة يستخدمها الكمبيوتر لتخزين البيانات التي يحتاجها المعالج للوصول إليها بسرعة. كلما زادت الذاكرة العشوائية، زادت قدرة الكمبيوتر على تشغيل برامج وتطبيقات متعددة بسلاسة." },
+        ];
+
+        function displayProducts(products, sectionId) {
+            const container = document.querySelector(`#${sectionId}`); // Changed to target the grid div directly
+            if (!container) return;
+            container.innerHTML = "";
+
+            if (products.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400">لا توجد منتجات مطابقة.</p>`;
+                return;
+            }
+
+            products.forEach((product) => {
+                const productCard = document.createElement("div");
+                productCard.className = "product-card";
+                // Added product details to show in card
+                const additionalDetails = [];
+                if (product.socket) additionalDetails.push(`**التيار:** ${product.socket}`);
+                if (product.chipset) additionalDetails.push(`**الشريحة:** ${product.chipset}`);
+                if (product.vram) additionalDetails.push(`**ذاكرة الفيديو:** ${product.vram}`);
+                if (product.size) additionalDetails.push(`**الحجم:** ${product.size}`);
+                if (product.resolution) additionalDetails.push(`**الدقة:** ${product.resolution}`);
+                if (product.refreshRate) additionalDetails.push(`**معدل التحديث:** ${product.refreshRate}`);
+                if (product.type) additionalDetails.push(`**النوع:** ${product.type}`);
+                if (product.fans) additionalDetails.push(`**المراوح:** ${product.fans}`);
+                if (product.noise !== undefined && product.noise !== null) additionalDetails.push(`**الضوضاء:** ${product.noise}`);
+                if (product.keysType) additionalDetails.push(`**نوع المفاتيح:** ${product.keysType}`);
+                if (product.switches) additionalDetails.push(`**المفاتيح:** ${product.switches}`);
+                if (product.coreCount) additionalDetails.push(`**الأنوية:** ${product.coreCount}`);
+                if (product.threadCount) additionalDetails.push(`**الخيوط:** ${product.threadCount}`);
+                if (product.baseFreq) additionalDetails.push(`**التردد الأساسي:** ${product.baseFreq}`);
+                if (product.boostFreq) additionalDetails.push(`**التردد الأقصى:** ${product.boostFreq}`);
+                if (product.weight) additionalDetails.push(`**الوزن:** ${product.weight}`);
+                if (product.sensor) additionalDetails.push(`**المستشعر:** ${product.sensor}`);
+                if (product.connection) additionalDetails.push(`**الاتصال:** ${product.connection}`);
+                if (product.battery) additionalDetails.push(`**البطارية:** ${product.battery}`);
+                if (product.capacity) additionalDetails.push(`**السعة:** ${product.capacity}`);
+                if (product.speed) additionalDetails.push(`**السرعة:** ${product.speed}`);
+                if (product.timings) additionalDetails.push(`**التيمينج:** ${product.timings}`);
+
+
+                productCard.innerHTML = `
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-details">${product.details}</p>
+                    ${additionalDetails.length > 0 ? `<div class="text-sm text-gray-600 dark:text-gray-400 mt-2">${additionalDetails.join('<br>')}</div>` : ''}
+                    <p class="product-price mt-2">${product.price ? product.price + ' جنيه' : 'السعر غير متاح'}</p>
+                    <div class="rating">${generateStarRating(product.rating)}</div>
+                    <button onclick="showProductDetails('${sectionId.replace('-products', '')}', '${product.name}')" class="mt-4 details-button w-full">
+                        عرض التفاصيل
+                    </button>
+                `;
+                container.appendChild(productCard);
+            });
+        }
+
+        function showProductDetails(category, productName) {
+            let product;
+            switch (category) {
+                case "gpu":
+                    product = gpuProducts.find((p) => p.name === productName);
+                    break;
+                case "processor":
+                    product = processorProducts.find((p) => p.name === productName);
+                    break;
+                case "motherboard":
+                    product = motherboardProducts.find((p) => p.name === productName);
+                    break;
+                case "ram":
+                    product = ramProducts.find((p) => p.name === productName);
+                    break;
+                case "monitor":
+                    product = monitorProducts.find((p) => p.name === productName);
+                    break;
+                case "cooler":
+                    product = coolerProducts.find((p) => p.name === productName);
+                    break;
+                case "keyboard":
+                    product = keyboardProducts.find((p) => p.name === productName);
+                    break;
+                case "mouse":
+                    product = mouseProducts.find((p) => p.name === productName);
+                    break;
+                default:
+                    product = null;
+            }
+            if (!product) {
+                product = allProducts.find((p) => p.name === productName);
+            }
+
+            if (product) {
+                const modal = document.createElement("div");
+                modal.className = "fixed z-50 inset-0 bg-black bg-opacity-50 flex items-center justify-center";
+                modal.innerHTML = `
+                    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md dark:bg-gray-700 dark:text-gray-200 relative">
+                        <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white text-2xl">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                        <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">${product.name}</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">${product.details}</p>
+                        ${product.socket ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>التيار:</strong> ${product.socket}</p>` : ''}
+                        ${product.chipset ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>الشريحة:</strong> ${product.chipset}</p>` : ''}
+                        ${product.vram ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>ذاكرة الفيديو (VRAM):</strong> ${product.vram}</p>` : ''}
+                        ${product.size ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>الحجم:</strong> ${product.size}</p>` : ''}
+                        ${product.resolution ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>الدقة:</strong> ${product.resolution}</p>` : ''}
+                        ${product.refreshRate ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>معدل التحديث:</strong> ${product.refreshRate}</p>` : ''}
+                        ${product.type ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>النوع:</strong> ${product.type}</p>` : ''}
+                        ${product.fans ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>المراوح:</strong> ${product.fans}</p>` : ''}
+                        ${product.noise !== undefined && product.noise !== null ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>مستوى الضجيج:</strong> ${product.noise}</p>` : ''}
+                        ${product.keysType ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>نوع المفاتيح:</strong> ${product.keysType}</p>` : ''}
+                        ${product.switches ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>المفاتيح:</strong> ${product.switches}</p>` : ''}
+                        ${product.coreCount ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>الأنوية:</strong> ${product.coreCount}</p>` : ''}
+                        ${product.threadCount ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>الخيوط:</strong> ${product.threadCount}</p>` : ''}
+                        ${product.baseFreq ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>التردد الأساسي:</strong> ${product.baseFreq}</p>` : ''}
+                        ${product.boostFreq ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>التردد الأقصى:</strong> ${product.boostFreq}</p>` : ''}
+                        ${product.weight ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>الوزن:</strong> ${product.weight}</p>` : ''}
+                        ${product.sensor ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>المستشعر:</strong> ${product.sensor}</p>` : ''}
+                        ${product.connection ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>الاتصال:</strong> ${product.connection}</p>` : ''}
+                        ${product.battery ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>البطارية:</strong> ${product.battery}</p>` : ''}
+                        ${product.capacity ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>السعة:</strong> ${product.capacity}</p>` : ''}
+                        ${product.speed ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>السرعة:</strong> ${product.speed}</p>` : ''}
+                        ${product.timings ? `<p class="text-gray-600 dark:text-gray-300 mb-2"><strong>التيمينج:</strong> ${product.timings}</p>` : ''}
+
+                        <p class="text-xl font-bold text-gray-700 dark:text-gray-200 mb-4">السعر: ${product.price ? product.price + ' جنيه' : 'غير متاح'}</p>
+                        <div class="rating">${generateStarRating(product.rating)}</div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
+        }
+
+        function closeModal() {
+            const modal = document.querySelector(".fixed.z-50");
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Modified filter function to work per section
+        function filterProductsBySection(category) {
+            let productsArray;
+            let minPriceId, maxPriceId, productsContainerId;
+
+            switch (category) {
+                case 'gpu':
+                    productsArray = gpuProducts;
+                    minPriceId = 'gpu-min-price';
+                    maxPriceId = 'gpu-max-price';
+                    productsContainerId = 'gpu-products';
+                    break;
+                case 'processor':
+                    productsArray = processorProducts;
+                    minPriceId = 'processor-min-price';
+                    maxPriceId = 'processor-max-price';
+                    productsContainerId = 'processor-products';
+                    break;
+                case 'motherboard':
+                    productsArray = motherboardProducts;
+                    minPriceId = 'motherboard-min-price';
+                    maxPriceId = 'motherboard-max-price';
+                    productsContainerId = 'motherboard-products';
+                    break;
+                case 'ram':
+                    productsArray = ramProducts;
+                    minPriceId = 'ram-min-price';
+                    maxPriceId = 'ram-max-price';
+                    productsContainerId = 'ram-products';
+                    break;
+                case 'monitor':
+                    productsArray = monitorProducts;
+                    minPriceId = 'monitor-min-price';
+                    maxPriceId = 'monitor-max-price';
+                    productsContainerId = 'monitor-products';
+                    break;
+                case 'cooler':
+                    productsArray = coolerProducts;
+                    minPriceId = 'cooler-min-price';
+                    maxPriceId = 'cooler-max-price';
+                    productsContainerId = 'cooler-products';
+                    break;
+                case 'keyboard':
+                    productsArray = keyboardProducts;
+                    minPriceId = 'keyboard-min-price';
+                    maxPriceId = 'keyboard-max-price';
+                    productsContainerId = 'keyboard-products';
+                    break;
+                case 'mouse':
+                    productsArray = mouseProducts;
+                    minPriceId = 'mouse-min-price';
+                    maxPriceId = 'mouse-max-price';
+                    productsContainerId = 'mouse-products';
+                    break;
+                default:
+                    return; // Should not happen
+            }
+
+            const minPrice = document.getElementById(minPriceId).value;
+            const maxPrice = document.getElementById(maxPriceId).value;
+
+            if (!minPrice || !maxPrice) {
+                alert("الرجاء إدخال الحد الأدنى والأعلى للسعر."); // Replace with toast notification later
+                return;
+            }
+
+            const min = parseFloat(minPrice);
+            const max = parseFloat(maxPrice);
+
+            if (isNaN(min) || isNaN(max) || min < 0 || max < 0 || min > max) {
+                alert("الرجاء إدخال أسعار صحيحة."); // Replace with toast notification later
+                return;
+            }
+
+            const filteredProducts = productsArray.filter(
+                (product) => product.price >= min && product.price <= max
+            );
+
+            displayProducts(filteredProducts, productsContainerId);
+
+            // Clear the input fields after filtering
+            document.getElementById(minPriceId).value = "";
+            document.getElementById(maxPriceId).value = "";
+        }
+
+        // The addToFavorites function is kept here, but without a button to call it from the UI.
+        function addToFavorites(category, productName) {
+            let product;
+            switch (category) {
+                case "gpu": product = gpuProducts.find((p) => p.name === productName); break;
+                case "processor": product = processorProducts.find((p) => p.name === productName); break;
+                case "motherboard": product = motherboardProducts.find((p) => p.name === productName); break;
+                case "ram": product = ramProducts.find((p) => p.name === productName); break;
+                case "monitor": product = monitorProducts.find((p) => p.name === productName); break;
+                case "cooler": product = coolerProducts.find((p) => p.name === productName); break;
+                case "keyboard": product = keyboardProducts.find((p) => p.name === productName); break;
+                case "mouse": product = mouseProducts.find((p) => p.name === productName); break;
+                default: product = allProducts.find((p) => p.name === productName); break;
+            }
+
+            if (product) {
+                let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+                const isProductInFavorites = favorites.some(fav => fav.name === product.name);
+
+                if (!isProductInFavorites) {
+                    favorites.push(product);
+                    localStorage.setItem('favorites', JSON.stringify(favorites));
+                    alert(`${product.name} تمت إضافته إلى مفضلتك!`); // Replace with toast notification
+                } else {
+                    alert(`${product.name} موجود بالفعل في مفضلتك!`); // Replace with toast notification
+                }
+            }
+        }
+
+        // Modified toggleSection to receive the clicked header element to update its icon
+        function toggleSection(containerId, headerElement) {
+            const content = document.getElementById(containerId);
+            const icon = headerElement ? headerElement.querySelector('i') : null;
+
+            if (content) {
+                content.classList.toggle('show');
+                if (icon) {
+                    if (content.classList.contains('show')) {
+                        icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                    } else {
+                        icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
                     }
-                ],
-                processors: [
-                    {
-                        id: 'intel-i3-13100',
-                        name: 'Intel Core i3-13100',
-                        coresThreads: '4 أنوية / 8 خيوط',
-                        baseMaxClock: '3.3 – 4.5 جيجاهرتز',
-                        notes: 'مناسبة للمهام اليومية والمكتبية',
-                        brand: 'Intel',
-                        price: 3000,
-                        rating: 4.0,
-                        image: 'https://m.media-amazon.com/images/I/51T93-uWj4L._AC_SL1000_.jpg',
-                        details: 'تفاصيل معالج Intel Core i3-13100...'
-                    },
-                    {
-                        id: 'intel-i5-14600k',
-                        name: 'Intel Core i5-14600K',
-                        coresThreads: '6-14 نواة / 12-20 خيط',
-                        baseMaxClock: '2.5 – 5.3 جيجاهرتز',
-                        notes: 'توازن بين الأداء والسعر',
-                        brand: 'Intel',
-                        price: 7000,
-                        rating: 4.5,
-                        image: 'https://m.media-amazon.com/images/I/51T93-uWj4L._AC_SL1000_.jpg',
-                        details: 'تفاصيل معالج Intel Core i5-14600K...'
-                    },
-                    {
-                        id: 'amd-ryzen3-5300g',
-                        name: 'AMD Ryzen 3 5300G',
-                        coresThreads: '4 أنوية / 8 خيوط',
-                        baseMaxClock: '3.8 – 4.2 جيجاهرتز',
-                        notes: 'مناسبة للمهام اليومية والمكتبية',
-                        brand: 'AMD',
-                        price: 2500,
-                        rating: 3.8,
-                        image: 'https://m.media-amazon.com/images/I/51T93-uWj4L._AC_SL1000_.jpg',
-                        details: 'تفاصيل معالج AMD Ryzen 3 5300G...'
-                    }
-                ],
-                memory: [
-                    {
-                        id: 'ram-ddr4-4gb-2400',
-                        name: 'Crucial 4GB DDR4 2400MHz',
-                        capacity: '4 جيجابايت',
-                        speed: '2400 MHz',
-                        brand: 'Crucial',
-                        price: 434.5, // متوسط السعر
-                        notes: 'الاستخدامات الأساسية',
-                        type: 'DDR4',
-                        rating: 3.9,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr4-8gb-2666-kingston',
-                        name: 'Kingston 8GB DDR4 2666MHz',
-                        capacity: '8 جيجابايت',
-                        speed: '2666 MHz',
-                        brand: 'Kingston',
-                        price: 669.5, // متوسط السعر
-                        notes: 'الاستخدامات المتوسطة',
-                        type: 'DDR4',
-                        rating: 4.2,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr4-8gb-3000-corsair',
-                        name: 'Corsair Vengeance LPX 8GB DDR4 3000MHz',
-                        capacity: '8 جيجابايت',
-                        speed: '3000 MHz',
-                        brand: 'Corsair',
-                        price: 937,
-                        notes: 'الألعاب الخفيفة',
-                        type: 'DDR4',
-                        rating: 4.0,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr4-8gb-3200-kingstonfury',
-                        name: 'Kingston Fury Beast 8GB DDR4 3200MHz',
-                        capacity: '8 جيجابايت',
-                        speed: '3200 MHz',
-                        brand: 'Kingston',
-                        price: 1024,
-                        notes: 'الألعاب وتعدد المهام',
-                        type: 'DDR4',
-                        rating: 4.5,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr4-8gb-3600-corsairhyperx',
-                        name: 'Corsair / HyperX 8GB DDR4 3600MHz',
-                        capacity: '8 جيجابايت',
-                        speed: '3600 MHz',
-                        brand: 'Corsair / HyperX',
-                        price: 2150,
-                        notes: 'الأداء العالي',
-                        type: 'DDR4',
-                        rating: 4.8,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr4-16gb-2666-crucial',
-                        name: 'Crucial 16GB DDR4 2666MHz',
-                        capacity: '16 جيجابايت',
-                        speed: '2666 MHz',
-                        brand: 'Crucial',
-                        price: 1099,
-                        notes: 'الاستخدامات المتقدمة',
-                        type: 'DDR4',
-                        rating: 4.3,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr4-16gb-3200-corsaircrucial',
-                        name: 'Corsair / Crucial 16GB DDR4 3200MHz',
-                        capacity: '16 جيجابايت',
-                        speed: '3200 MHz',
-                        brand: 'Corsair / Crucial',
-                        price: 1949,
-                        notes: 'الألعاب الثقيلة والتصميم',
-                        type: 'DDR4',
-                        rating: 4.7,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr4-16gb-3600-corsairoris',
-                        name: 'Corsair / Oris 16GB DDR4 3600MHz',
-                        capacity: '16 جيجابايت',
-                        speed: '3600 MHz',
-                        brand: 'Corsair / Oris',
-                        price: 2749,
-                        notes: 'الأداء الاحترافي',
-                        type: 'DDR4',
-                        rating: 4.9,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr4-32gb-3200-crucialcorsair',
-                        name: 'Crucial / Corsair 32GB DDR4 3200MHz',
-                        capacity: '32 جيجابايت',
-                        speed: '3200 MHz',
-                        brand: 'Crucial / Corsair',
-                        price: 3444.5,
-                        notes: 'التصميم والمونتاج',
-                        type: 'DDR4',
-                        rating: 4.6,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr4-32gb-3600-hyperxcorsair',
-                        name: 'HyperX / Corsair 32GB DDR4 3600MHz',
-                        capacity: '32 جيجابايت',
-                        speed: '3600 MHz',
-                        brand: 'HyperX / Corsair',
-                        price: 3444.5,
-                        notes: 'المهام الثقيلة',
-                        type: 'DDR4',
-                        rating: 4.8,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr3-2gb-1333-kingston',
-                        name: 'Kingston 2GB DDR3 1333MHz',
-                        capacity: '2 جيجابايت',
-                        speed: '1333 MHz',
-                        brand: 'Kingston',
-                        price: 234.5,
-                        notes: 'الاستخدامات الأساسية',
-                        type: 'DDR3',
-                        rating: 3.5,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr3-4gb-1600-kingstonhynixpatriot',
-                        name: 'Kingston / Hynix / Patriot 4GB DDR3 1600MHz',
-                        capacity: '4 جيجابايت',
-                        speed: '1600 MHz',
-                        brand: 'Kingston / Hynix / Patriot',
-                        price: 332.5,
-                        notes: 'الاستخدامات المتوسطة',
-                        type: 'DDR3',
-                        rating: 3.8,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr3-8gb-1600-kingstoncrucial',
-                        name: 'Kingston / Crucial 8GB DDR3 1600MHz',
-                        capacity: '8 جيجابايت',
-                        speed: '1600 MHz',
-                        brand: 'Kingston / Crucial',
-                        price: 905,
-                        notes: 'الاستخدامات المتقدمة',
-                        type: 'DDR3',
-                        rating: 4.1,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr5-16gb-4800-crucial',
-                        name: 'Crucial 16GB DDR5 4800MHz',
-                        capacity: '16 جيجابايت',
-                        speed: '4800 MHz',
-                        brand: 'Crucial',
-                        price: 2634,
-                        notes: 'الألعاب الحديثة والتصميم',
-                        type: 'DDR5',
-                        rating: 4.5,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    },
-                    {
-                        id: 'ram-ddr5-32gb-6000-teamgroup',
-                        name: 'TeamGroup T-Force Delta RGB 32GB DDR5 6000MHz',
-                        capacity: '32 جيجابايت',
-                        speed: '6000 MHz',
-                        brand: 'TeamGroup',
-                        price: 3019,
-                        notes: 'الأداء الاحترافي',
-                        type: 'DDR5',
-                        rating: 4.7,
-                        image: 'https://m.media-amazon.com/images/I/41J6nKvm3GL._AC_SL1000_.jpg'
-                    }
-                ],
-                storage: [
-                    { id: 'ssd-1', name: 'Samsung 500GB SSD', price: 900, rating: 4.5, image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg' },
-                    { id: 'hdd-1', name: 'Seagate 1TB HDD', price: 500, rating: 3.9, image: 'https://m.media-amazon.com/images/I/71CjW9wE1jL._AC_SL1500_.jpg' }
-                ],
-                headphones: [
-                    {
-                        id: 'headphones-gamma-gt304',
-                        name: 'Gamma GT-304 2.0',
-                        price: 199,
-                        features: 'تصميم خشبي، صوت ستيريو، مناسبة للمكاتب',
-                        source: 'كيمو ستور',
-                        rating: 3.5,
-                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'headphones-kisonli-l1040',
-                        name: 'Kisonli L-1040 RGB 2.0',
-                        price: 195,
-                        features: 'إضاءة RGB، صوت نقي، تصميم مدمج',
-                        source: 'كيمو ستور',
-                        rating: 4.1,
-                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'headphones-hp-dhs2111',
-                        name: 'HP DHS-2111 2.0',
-                        price: 525,
-                        features: 'صوت عالي الجودة، تصميم أنيق، مناسبة للمنزل والمكتب',
-                        source: 'كيمو ستور',
-                        rating: 4.3,
-                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'headphones-jbl-partybox1000',
-                        name: 'JBL Partybox 1000',
-                        price: 7999,
-                        features: 'إضاءة LED، صوت قوي، ميكروفون وجيتار مدخل',
-                        source: 'كيمو ستور',
-                        rating: 4.8,
-                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'headphones-anker-soundcore-rave-neo',
-                        name: 'Anker Soundcore Rave Neo',
-                        price: 5399,
-                        features: 'إضاءة LED، صوت جهير قوي، بطارية تدوم حتى 18 ساعة',
-                        source: 'دريم 2000',
-                        rating: 4.6,
-                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
-                    }
-                ],
-                keyboards: [
-                    {
-                        id: 'keyboard-redragon-k624-pro',
-                        name: 'Redragon K624 Pro – لاسلكي 60% RGB',
-                        description: 'لوحة مفاتيح ميكانيكية بإضاءة خلفية LED و63 مفتاحًا، تدعم الاتصال عبر 2.4G وBluetooth وكابل Type-C.',
-                        price: 3199,
-                        source: 'Games2Egypt، Noon',
-                        rating: 4.5,
-                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'keyboard-redragon-k614-anivia',
-                        name: 'Redragon K614 Anivia – سلكية 60%',
-                        description: 'لوحة مفاتيح ميكانيكية سلكية رفيعة للغاية بنسبة 60%، مزودة بمفاتيح حمراء صامتة وإضاءة RGB.',
-                        price: 1749,
-                        source: 'Games2Egypt، Noon',
-                        rating: 4.2,
-                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'keyboard-meetion-mk500',
-                        name: 'Meetion MK500 – مفاتيح زرقاء عربية',
-                        description: 'لوحة مفاتيح ميكانيكية سلكية بمفاتيح OUTEMU الزرقاء، مزودة بإضاءة خلفية LED ومساند للذراعين قابلة للإزالة.',
-                        price: 1599,
-                        source: 'Compumarts، Noon',
-                        rating: 4.0,
-                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
-                    }
-                ],
-                mice: [
-                    {
-                        id: 'mouse-redragon-m612',
-                        name: 'Redragon M612 Predator RGB',
-                        price: 949,
-                        features: 'دقة 8000 نقطة في البوصة، 9 أزرار قابلة للبرمجة، إضاءة RGB',
-                        source: 'جوميا',
-                        rating: 4.3,
-                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
-                    },
-                    {
-                        id: 'mouse-redragon-m715',
-                        name: 'Redragon M715 DAGGER',
-                        price: 949,
-                        features: 'دقة 10000 نقطة في البوصة، تصميم مريح، أزرار قابلة للبرمجة',
-                        source: 'جوميا',
-                        rating: 4.1,
-                        image: 'https://m.media-amazon.com/images/I/61wGk99mD3L._AC_SL1500_.jpg'
-                    }
-                ]
+                }
+            }
+        }
+
+        // --- Dark/Light Mode Logic ---
+        const modeToggle = document.getElementById('mode-toggle');
+
+        function enableDarkMode() {
+            document.documentElement.classList.add('dark');
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+            const icon = modeToggle ? modeToggle.querySelector('i') : null;
+            if (icon) {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+
+        function enableLightMode() {
+            document.documentElement.classList.remove('dark');
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+            const icon = modeToggle ? modeToggle.querySelector('i') : null;
+            if (icon) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            }
+        }
+
+        if (modeToggle) {
+            modeToggle.addEventListener('click', () => {
+                modeToggle.classList.add('spin');
+                setTimeout(() => {
+                    modeToggle.classList.remove('spin');
+                }, 300);
+
+                if (document.documentElement.classList.contains('dark')) {
+                    enableLightMode();
+                } else {
+                    enableDarkMode();
+                }
+            });
+        }
+
+        // Initialize theme and display products on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                enableDarkMode();
+            } else {
+                enableLightMode();
+            }
+
+            // Display initial products for all sections
+            displayProducts(gpuProducts, "gpu-products");
+            displayProducts(processorProducts, "processor-products");
+            displayProducts(motherboardProducts, "motherboard-products");
+            displayProducts(ramProducts, "ram-products");
+            displayProducts(monitorProducts, "monitor-products");
+            displayProducts(coolerProducts, "cooler-products");
+            displayProducts(keyboardProducts, "keyboard-products");
+            displayProducts(mouseProducts, "mouse-products");
+
+            // Initially expand the first section (GPU)
+            const gpuHeader = document.querySelector('#products .collapsible-wrapper .collapsible-header');
+            const gpuContainer = document.getElementById('gpu-products-container');
+            if (gpuContainer && gpuHeader && !gpuContainer.classList.contains('show')) {
+                toggleSection('gpu-products-container', gpuHeader);
+            }
+        });
+
+        // --- Product Search Logic ---
+        function searchProducts() {
+            const searchInput = document.getElementById('product-search-input').value.toLowerCase();
+            const allProductContainers = {
+                'gpu-products': gpuProducts,
+                'processor-products': processorProducts,
+                'motherboard-products': motherboardProducts,
+                'ram-products': ramProducts,
+                'monitor-products': monitorProducts,
+                'cooler-products': coolerProducts,
+                'keyboard-products': keyboardProducts,
+                'mouse-products': mouseProducts
             };
 
-            function toggleTheme() {
-                body.classList.toggle('light-mode');
-                themeToggle.classList.toggle('light-mode');
-                themeToggle.classList.add('rotated');
-                setTimeout(() => {
-                    themeToggle.classList.remove('rotated');
-                }, 500);
-            }
+            // Clear previous search results and collapse sections
+            for (const key in allProductContainers) {
+                const container = document.getElementById(`${key}-container`);
+                const header = container ? container.previousElementSibling : null;
+                const icon = header ? header.querySelector('i') : null;
 
-            function renderProducts(category, productList) {
-                const productsContainer = document.getElementById(category + '-products').querySelector('.products');
-                productsContainer.innerHTML = '';
-                productList.forEach(product => {
-                    const productDiv = document.createElement('div');
-                    productDiv.classList.add('product');
-                    productDiv.dataset.productId = product.id;
-                    productDiv.dataset.productCategory = category;
-
-                    const img = document.createElement('img');
-                    img.src = product.image || 'https://via.placeholder.com/150'; // صورة افتراضية
-                    img.alt = product.name;
-
-                    const h3 = document.createElement('h3');
-                    h3.textContent = product.name;
-
-                    const price = document.createElement('p');
-                    price.classList.add('price');
-                    price.textContent = `${product.price.toFixed(2)} جنيه`;
-
-                    const rating = document.createElement('p');
-                    rating.classList.add('rating');
-                    rating.textContent = '⭐'.repeat(Math.round(product.rating || 0));
-
-                    const detailsButton = document.createElement('button');
-                    detailsButton.classList.add('details-btn');
-                    detailsButton.textContent = 'عرض التفاصيل';
-                    detailsButton.addEventListener('click', () => showProductDetails(product));
-
-                    const favoriteButton = document.createElement('button');
-                    favoriteButton.classList.add('favorite-btn');
-                    favoriteButton.textContent = favorites.includes(product.id) ? 'إزالة من المفضلة' : 'أضف للمفضلة';
-                    favoriteButton.addEventListener('click', () => toggleFavorite(product.id, favoriteButton));
-
-                    productDiv.appendChild(img);
-                    productDiv.appendChild(h3);
-                    productDiv.appendChild(price);
-                    productDiv.appendChild(rating);
-                    productDiv.appendChild(detailsButton);
-                    productDiv.appendChild(favoriteButton);
-
-                    productsContainer.appendChild(productDiv);
-                });
-            }
-
-            function showProductDetails(product) {
-                modalImage.src = product.image || 'https://via.placeholder.com/300';
-                modalImage.alt = product.name;
-                modalTitle.textContent = product.name;
-                modalDetails.textContent = product.details || 'لا توجد تفاصيل متاحة لهذا المنتج.';
-                modalPrice.textContent = `${product.price.toFixed(2)} جنيه`;
-                modalRating.textContent = '⭐'.repeat(Math.round(product.rating || 0));
-                productDetailsModal.style.display = 'block';
-            }
-
-            function closeProductDetailsModal() {
-                productDetailsModal.style.display = 'none';
-            }
-
-            function toggleFavorite(productId, button) {
-                const index = favorites.indexOf(productId);
-                if (index > -1) {
-                    favorites.splice(index, 1);
-                    button.textContent = 'أضف للمفضلة';
-                    button.classList.remove('active');
-                } else {
-                    favorites.push(productId);
-                    button.textContent = 'إزالة من المفضلة';
-                    button.classList.add('active');
+                if (container && container.classList.contains('show')) {
+                    container.classList.remove('show');
+                    if (icon) {
+                        icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                    }
                 }
-                localStorage.setItem('favorites', JSON.stringify(favorites));
-            }
-
-            function searchProducts() {
-                const searchTerm = searchInput.value.toLowerCase();
-                for (const category in catalog) {
-                    const filteredProducts = catalog[category].filter(product =>
-                        product.name.toLowerCase().includes(searchTerm)
-                    );
-                    renderProducts(category, filteredProducts);
+                const gridContainer = document.querySelector(`#${key}`); // Corrected to target grid div directly
+                if (gridContainer) {
+                    gridContainer.innerHTML = '';
                 }
             }
 
-            function applyRangeFilter(category) {
-                const minPriceInput = document.getElementById(`min-price-${category}`);
-                const maxPriceInput = document.getElementById(`max-price-${category}`);
-                const minPrice = parseFloat(minPriceInput.value) || 0;
-                const maxPrice = parseFloat(maxPriceInput.value) || Infinity;
+            if (searchInput === '') {
+                // If search input is empty, re-display all products as they were initially (collapsed by default)
+                displayProducts(gpuProducts, "gpu-products");
+                displayProducts(processorProducts, "processor-products");
+                displayProducts(motherboardProducts, "motherboard-products");
+                displayProducts(ramProducts, "ram-products");
+                displayProducts(monitorProducts, "monitor-products");
+                displayProducts(coolerProducts, "cooler-products");
+                displayProducts(keyboardProducts, "keyboard-products");
+                displayProducts(mouseProducts, "mouse-products");
+                return;
+            }
 
-                const filteredProducts = catalog[category].filter(product =>
-                    product.price >= minPrice && product.price <= maxPrice
+            let productsFoundInAnyCategory = false;
+            for (const categoryId in allProductContainers) {
+                const products = allProductContainers[categoryId];
+                const filteredProducts = products.filter(product =>
+                    product.name.toLowerCase().includes(searchInput) ||
+                    (product.details && product.details.toLowerCase().includes(searchInput)) ||
+                    (product.chipset && product.chipset.toLowerCase().includes(searchInput)) ||
+                    (product.vram && product.vram.toLowerCase().includes(searchInput)) ||
+                    (product.size && product.size.toLowerCase().includes(searchInput)) ||
+                    (product.resolution && product.resolution.toLowerCase().includes(searchInput)) ||
+                    (product.refreshRate && product.refreshRate.toLowerCase().includes(searchInput)) ||
+                    (product.type && product.type.toLowerCase().includes(searchInput)) ||
+                    (product.fans && product.fans.toLowerCase().includes(searchInput)) ||
+                    (product.noise !== undefined && product.noise !== null && product.noise.toString().toLowerCase().includes(searchInput)) ||
+                    (product.keysType && product.keysType.toLowerCase().includes(searchInput)) ||
+                    (product.switches && product.switches.toLowerCase().includes(searchInput)) ||
+                    (product.coreCount && product.coreCount.toString().includes(searchInput)) ||
+                    (product.threadCount && product.threadCount.toString().includes(searchInput)) ||
+                    (product.baseFreq && product.baseFreq.toLowerCase().includes(searchInput)) ||
+                    (product.boostFreq && product.boostFreq.toLowerCase().includes(searchInput)) ||
+                    (product.weight && product.weight.toLowerCase().includes(searchInput)) ||
+                    (product.sensor && product.sensor.toLowerCase().includes(searchInput)) ||
+                    (product.connection && product.connection.toLowerCase().includes(searchInput)) ||
+                    (product.battery && product.battery.toLowerCase().includes(searchInput)) ||
+                    (product.capacity && product.capacity.toLowerCase().includes(searchInput)) ||
+                    (product.speed && product.speed.toLowerCase().includes(searchInput)) ||
+                    (product.timings && product.timings.toLowerCase().includes(searchInput))
                 );
-                renderProducts(category, filteredProducts);
-            }
 
-            // Initial rendering
-            for (const category in catalog) {
-                renderProducts(category, catalog[category]);
-            }
-
-            // Event listeners
-            themeToggle.addEventListener('click', toggleTheme);
-            searchButton.addEventListener('click', searchProducts);
-            searchInput.addEventListener('input', searchProducts);
-            closeModalBtn.addEventListener('click', closeProductDetailsModal);
-
-            sectionHeaders.forEach(header => {
-                header.addEventListener('click', function() {
-                    const content = this.nextElementSibling;
-                    const arrow = this.querySelector('.section-header-arrow');
-                    content.classList.toggle('visible');
-                    arrow.classList.toggle('open');
-                });
-            });
-
-            applyPriceFilters.forEach(button => {
-                button.addEventListener('click', function() {
-                    const category = this.dataset.category;
-                    applyRangeFilter(category);
-                });
-            });
-
-            // حفظ حالة الأقسام المفتوحة في Local Storage (مثال بسيط)
-            const openSections = JSON.parse(localStorage.getItem('openSections')) || {'graphicsCards-section': true};
-            sectionHeaders.forEach(header => {
-                const content = header.nextElementSibling;
-                const arrow = header.querySelector('.section-header-arrow');
-                const sectionId = header.parentNode.id;
-                if (openSections[sectionId]) {
-                    content.classList.add('visible');
-                    arrow.classList.add('open');
+                if (filteredProducts.length > 0) {
+                    displayProducts(filteredProducts, categoryId);
+                    const container = document.getElementById(`${categoryId}-container`);
+                    const header = container ? container.previousElementSibling : null;
+                    if (container && header && !container.classList.contains('show')) {
+                        toggleSection(categoryId + '-container', header); // Use toggleSection to expand
+                    }
+                    productsFoundInAnyCategory = true;
+                } else {
+                    const container = document.querySelector(`#${categoryId}`); // Corrected to target grid div directly
+                    if (container) {
+                        container.innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400">لا توجد منتجات مطابقة.</p>`;
+                    }
                 }
-                header.addEventListener('click', () => {
-                    openSections[sectionId] = content.classList.contains('visible');
-                    localStorage.setItem('openSections', JSON.stringify(openSections));
-                });
-            });
-        });
+            }
+        }
+
+        // --- Ask Me Feature Logic ---
+        function submitQuestion() {
+            const questionInput = document.getElementById('ask-me-input');
+            const answerDiv = document.getElementById('ask-me-answer');
+            const userQuestion = questionInput.value.trim();
+
+            if (userQuestion === "") {
+                answerDiv.textContent = "الرجاء كتابة سؤالك.";
+                answerDiv.classList.remove('hidden');
+                return;
+            }
+
+            const matchedFaq = faqAnswers.find(faq =>
+                faq.question.toLowerCase().includes(userQuestion.toLowerCase()) ||
+                userQuestion.toLowerCase().includes(faq.question.toLowerCase())
+            );
+
+            if (matchedFaq) {
+                answerDiv.innerHTML = `<strong>سؤالك:</strong> ${userQuestion}<br><strong>الإجابة:</strong> ${matchedFaq.answer}`;
+                answerDiv.classList.remove('hidden');
+            } else {
+                answerDiv.textContent = "عذراً، لم أجد إجابة محددة لسؤالك. يرجى إعادة الصياغة أو تصفح قسم الأسئلة الشائعة.";
+                answerDiv.classList.remove('hidden');
+            }
+            questionInput.value = "";
+        }
     </script>
 </body>
 </html>
