@@ -1,7 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://mohamed1234545.github.io/ASK-ME-FIRST-/</loc>
-    <priority>1.0</priority>
-  </url>
-</urlset>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sitemap</title>
+</head>
+<body>
+  <h1>صفحات الموقع</h1>
+  <ul>
+    <li><a href="https://mohamed1234545.github.io/ASK-ME-FIRST-/">الرئيسية</a></li>
+  </ul>
+</body>
+</html>
